@@ -11,9 +11,16 @@ namespace Diff_Tools
         private string fileLocation = "";
         private bool fileExists = false;
         private bool isLathe = false;
+        private string NC1;
+        private string NCB1;
+        private string NCB2;
+        private string PLC1;
+        private string PLC2;
+        private string PLC3;
         private List<string> origFileContents = new List<string>();
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
-        private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)"};
+        private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(NCB2)", "/(PLC1)",
+                                                           "/(PLC2)", "/(PLC3)"};
         public void fillClassVar()
         {
             bool varExist = true;
@@ -46,7 +53,7 @@ namespace Diff_Tools
                         if (origFileContents[origFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("LNC"))
                         {
                             dmcLabel.Remove("/(PCGN)");
-                            dmcLabel.Add("/(PCGM)");
+                            dmcLabel.Insert(6, "/(PCGM)");
                             isLathe = true;
                         }
                     }
@@ -81,7 +88,18 @@ namespace Diff_Tools
                     WinVersion = regex.Replace(origFileContents[index + 1], string.Empty);
                     index = origFileContents.IndexOf(dmcLabel[6]);
                     ApiLibVer = regex.Replace(origFileContents[index + 2],string.Empty);
-                    
+                    index = origFileContents.IndexOf(dmcLabel[7]);
+                    NC1 = regex.Replace(origFileContents[index + 3] +"-"+ origFileContents[index + 5], string.Empty);
+                    index = origFileContents.IndexOf(dmcLabel[8]);
+                    NCB1 = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+                    index = origFileContents.IndexOf(dmcLabel[9]);
+                    NCB2 = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+                    index = origFileContents.IndexOf(dmcLabel[10]);
+                    PLC1 = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+                    index = origFileContents.IndexOf(dmcLabel[11]);
+                    PLC2 = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+                    index = origFileContents.IndexOf(dmcLabel[12]);
+                    PLC3 = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
                 }
                 
             }
