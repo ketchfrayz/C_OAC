@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace Diff_Tools
@@ -23,6 +24,8 @@ namespace Diff_Tools
         public List<Action> checks = new List<Action>();
         private DataTable apiDT;
         private DataSet apiDS;
+        private DataSet rulesDS;
+        private DataTable rulesDT;
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9]");
         public mainForm()
         {
@@ -37,11 +40,51 @@ namespace Diff_Tools
         //        client.DownloadFile("http://160.188.54.158/sfb_docs/lathe/osp-p100/software_combination/", "p300a-win10-sxga-soft.xlsx");
         //    }
         //}
+        private void popRulesDT()
+        {
+            rulesDS = new DataSet();
+            string filePath = "C:\\Program Files\\Okuma\\Diff_Tools\\rules.CSV";
+            string fullText = "";
+            rulesDT = new DataTable("Rules");
+            if (File.Exists(filePath))
+            {
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        fullText = sr.ReadToEnd().ToString();
+                        string[] rows = fullText.Split('\n');
+                        for (var i = 0; i < rows.Count(); i++)
+                        {
+                            string[] rowValues = rows[i].Split(',');
+                            if (i == 0)
+                            {
+                                for (var j = 0; j < rowValues.Count(); j++)
+                                {
+                                    rulesDT.Columns.Add(rowValues[j]);
+                                }
+                            }
+                            else
+                            {
+                                DataRow dr = rulesDT.NewRow();
+                                for (var k = 0; k < rowValues.Count(); k++)
+                                {
+                                    dr[k] = rowValues[k].ToString();
+                                }
+                                rulesDT.Rows.Add(dr);
+                            }
+                        }
+                    }
+                }
+                rulesDS.Tables.Add(rulesDT);
+            }
+
+        }
         private void popAPIDT()
         {
             apiDS = new DataSet();
             string filePath = "C:\\Program Files\\Okuma\\Diff_Tools\\API_Version.CSV";
-            string fullText;
+            string fullText = "";
             apiDT = new DataTable("APIVersion");
             if (File.Exists(filePath)) 
             {
@@ -51,7 +94,7 @@ namespace Diff_Tools
                     {
                         fullText = sr.ReadToEnd().ToString();
                         string[] rows = fullText.Split('\n');
-                        for (var i = 0; i < rows.Count() - 1; i++)
+                        for (var i = 0; i < rows.Count(); i++)
                         {
                             string[] rowValues = rows[i].Split(',');
                             if (i == 0)
@@ -178,6 +221,29 @@ namespace Diff_Tools
             }
             return false;
         }
+        //private bool checkRules(DMC iDmc)
+        //{
+        //    int colIndex = 0;
+        //    string expression = "controlType='" + iDmc.OSPType + "' OR controlType LIKE '%" + iDmc.OSPType + "|%' OR controlType LIKE '*|" + iDmc.OSPType + "'";
+        //    DataRow[] foundRows = rulesDS.Tables[0].Select(expression);
+        //    if (foundRows.Count() > 0)
+        //    {
+        //        for (var i = 0; i < foundRows.Count(); i++)
+        //        {
+        //            if (foundRows[i][1].ToString().Contains("|"))
+        //            {
+        //                string[] results = foundRows[i][1].ToString().Split('|');
+        //                if (!results.Contains(iDmc.MachineType))
+        //                {
+        //                    return false;
+        //                }
+        //            } else if (foundRows[i][1].ToString() == "ANY" || foundRows[i][1].ToString() == iDmc.MachineType)
+        //            {
+                        
+        //            }
+        //        }
+        //    }
+        //}
         public void checkIORev(List<string> piodFiles)
         {
 
@@ -348,6 +414,21 @@ namespace Diff_Tools
         private void MainForm_Load(object sender, System.EventArgs e)
         {
             popAPIDT();
+            popRulesDT();
+            //Excel.Application xlApp = new Excel.Application();
+            //Excel.Workbook xlWorkbook = xlApp.Workbooks.Open("C:\\Program Files\\Okuma\\Diff_Tools\\Latest file release\\Lathe\\P300A - WIN 10 compatible\\p300a-win10-sxga-soft (1).xlsx");
+            //Excel._Worksheet _Worksheet = xlWorkbook.Sheets[2];
+            //Excel.Range xlRange = _Worksheet.UsedRange;
+
+            //int rowCount = xlRange.Rows.Count;
+            //int colCount = xlRange.Rows.Count;
+            //MessageBox.Show(xlRange.Cells[19,153].Value2.ToString());
+
+            //xlWorkbook.Close();
+            //xlApp.Quit();
+            
+            
+
             //FileDownloadTest();
         }
         private void MainForm_DragEnter(object sender, DragEventArgs e)
@@ -373,8 +454,15 @@ namespace Diff_Tools
                     diff.FileLocation = files[0];
                     dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
                     //MessageBox.Show(dmc.FileLocation);
-                    readDiffFile(diff.FileLocation, dmc.FileLocation + "\\LISTA.DAT");
-                    
+                    readDiffFile(diff.FileLocation, dmc.FileLocation + "\\LISTA.DAT", dmc.FileLocation + "\\OSPMNGCD.CNC");
+                    //for (var i = 1; i <= 8; i++)
+                    //{
+                    //    for (var a = 0; a <= 7; a++)
+                    //    {
+                    //        HasSpecCode("NC1", i, a);
+                    //    }
+                    //}
+                    // MessageBox.Show(getSpecCodeLabel("B-TURRET SUB SP. -  CENTER COMP.     o  NO LOAD DETECT   -  PLR2 LOW SEQUENCE-", 3));
                     diff.setTrimFileContents(trimBeginEnd(diff.getOrigFileContents()));
                     diff.setHexIndex(getHexIndex(diff.getTrimFileContents()));
                     processDiff();
@@ -689,7 +777,7 @@ namespace Diff_Tools
             contentsList.RemoveAll( string.IsNullOrWhiteSpace);
             return contentsList;
         }
-        public void readDiffFile(string diffFileLocation, string dmcFileLocation)
+        public void readDiffFile(string diffFileLocation, string listaFileLocation, string DMCFileLocation)
         {
             using (var sr = new StreamReader(diffFileLocation))
             {
@@ -703,27 +791,44 @@ namespace Diff_Tools
             {
                 displayRTB.Text += diff.getOrigFileContents(i) + System.Environment.NewLine;
             }
-            if (File.Exists(dmcFileLocation))
+            if (File.Exists(listaFileLocation))
             {
-                using (var sr = new StreamReader(dmcFileLocation))
+                using (var sr = new StreamReader(listaFileLocation))
                 {
                     do
                     {
                         dmc.addOrigFileContents(sr.ReadLine());
                     } while (sr.Peek() != -1);
                 }
-                dmc.FileExists = true;
+                dmc.ListaFileExists = true;
                 dmc.fillClassVar();
                 //MessageBox.Show(dmc.OSPType + System.Environment.NewLine + dmc.MachineType + System.Environment.NewLine + dmc.SerialNumber + System.Environment.NewLine + dmc.NcVer + System.Environment.NewLine + dmc.PlcVer + System.Environment.NewLine + dmc.ApiVer + System.Environment.NewLine + dmc.ApiLibVer + System.Environment.NewLine + dmc.WinVersion);
                 if (diff.SerialNumber != dmc.SerialNumber)
                 {
-                    MessageBox.Show("Diff and DMC serial number do not match.  Checks will be limited.");
+                    MessageBox.Show("Diff and Lista serial number do not match.  Put correct LISTA in machine folder.");
                 }
             }
             else
             {
-                dmc.FileExists = false;
-                MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(dmcFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
+                dmc.ListaFileExists = false;
+                MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(listaFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
+            }
+            if (File.Exists(DMCFileLocation))
+            {
+                using (var sr = new StreamReader(DMCFileLocation))
+                {
+                    do
+                    {
+                        dmc.addOrigDMCFileContents(sr.ReadLine());
+                    } while (sr.Peek() != -1);
+                }
+                dmc.DMCFileExists = true;
+                dmc.FillSpecCodeList();
+
+            }
+            else
+            {
+                dmc.DMCFileExists = false;
             }
         }
         public List<string> getHexIndex(List<string> fileList)
@@ -1069,6 +1174,108 @@ namespace Diff_Tools
             {
                 apiLB.BackColor = Color.LightGreen;
             }
+
+        }
+
+
+
+        public string getSpecCodeLabel(string specLine, int colNum)
+        {
+            string specCode = "";
+            if (colNum == 0)
+            {
+                specCode = specLine.Substring(0, 18);
+                return specCode;
+            }
+            else
+            {
+                specCode = specLine.Substring(colNum * 20, 18);
+                return specCode;
+            }
+        }
+        public bool HasSpecCode(string specType, int specNum, int specBit)
+        {
+            
+            string[] specCode = new string[0];
+            List<string> specList = new List<string>();
+            switch (specType)
+            {
+                case "NC1":
+                    specCode = dmc.NC1Hex.Split('-');
+                    specList = dmc.getNC1();
+                    break;
+                case "NCB1":
+                    specCode = dmc.NCB1Hex.Split('-');
+                    specList = dmc.getNCB1();
+                    break;
+                case "NCB2":
+                    specCode = dmc.NCB2Hex.Split('-');
+                    specList = dmc.getNCB2();
+                    break;
+                case "PLC1":
+                    specCode = dmc.PLC1Hex.Split('-');
+                    specList = dmc.getPLC1();
+                    break;
+                case "PLC2":
+                    specCode = dmc.PLC2Hex.Split('-');
+                    specList = dmc.getPLC2();
+                    break;
+                case "PLC3":
+                    specCode = dmc.PLC3Hex.Split('-');
+                    specList = dmc.getPLC3();
+                    break;
+            }
+            int index = (specNum - 1) / 2;
+            int indexRemainder = specNum % 2;
+            int decimalVal = 0;
+            string hexValue = "";
+            if (indexRemainder == 1)
+            {
+                hexValue = specCode[index].Substring(0, 2);
+                decimalVal = Convert.ToInt32(hexValue, 16);
+            }
+            else if (indexRemainder == 0)
+            {
+                hexValue = specCode[index].Substring(2, 2);
+                decimalVal = Convert.ToInt32(hexValue, 16);
+            }
+            int bitVal = 0;
+
+            for(var i = 0;i <= specBit; i++)
+            {
+                bitVal = decimalVal % 2;
+                decimalVal /= 2;
+            }
+            decimalVal = Convert.ToInt32(hexValue, 16);
+
+            index = specNum / 8;
+            indexRemainder = specNum % 8;
+            if (indexRemainder == 0)
+            {
+                index -= 1;
+            }
+            else
+            {
+                indexRemainder = 8 - indexRemainder;
+            }
+            int sepIndex = 0;
+            Int32.TryParse(dmc.GetSpecSepIndex(indexRemainder),out sepIndex);
+            sepIndex += 1;
+            MessageBox.Show(specList[sepIndex + specBit] + " " + bitVal);
+            if (bitVal == 1)
+            {
+                //List<string> sepIndex = new List<string>();
+                return true;
+            } else
+            {
+                return false;
+            }
+
+            
+
+            //List<string> sepIndex = new List<string>();
+
+            //string[] sepSpecCode = specCode.Split('-');
 
         }
     }
