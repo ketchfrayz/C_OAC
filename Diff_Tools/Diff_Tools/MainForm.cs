@@ -22,11 +22,12 @@ namespace Diff_Tools
         private Diff diff;
         private DMC dmc;
         public List<Action> checks = new List<Action>();
-        private DataTable apiDT;
-        private DataSet apiDS;
-        private DataSet rulesDS;
-        private DataTable rulesDT;
+        static  private DataTable apiDT;
+        static private DataSet apiDS;
+        static public DataSet rulesDS;
+        static public DataTable rulesDT;
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9]");
+        public ControlTypeForm controlTypeForm = new ControlTypeForm();
         public mainForm()
         {
             InitializeComponent();
@@ -43,7 +44,7 @@ namespace Diff_Tools
         private void popRulesDT()
         {
             rulesDS = new DataSet();
-            string filePath = "C:\\Program Files\\Okuma\\Diff_Tools\\rules.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             string fullText = "";
             rulesDT = new DataTable("Rules");
             if (File.Exists(filePath))
@@ -221,29 +222,46 @@ namespace Diff_Tools
             }
             return false;
         }
-        //private bool checkRules(DMC iDmc)
-        //{
-        //    int colIndex = 0;
-        //    string expression = "controlType='" + iDmc.OSPType + "' OR controlType LIKE '%" + iDmc.OSPType + "|%' OR controlType LIKE '*|" + iDmc.OSPType + "'";
-        //    DataRow[] foundRows = rulesDS.Tables[0].Select(expression);
-        //    if (foundRows.Count() > 0)
-        //    {
-        //        for (var i = 0; i < foundRows.Count(); i++)
-        //        {
-        //            if (foundRows[i][1].ToString().Contains("|"))
-        //            {
-        //                string[] results = foundRows[i][1].ToString().Split('|');
-        //                if (!results.Contains(iDmc.MachineType))
-        //                {
-        //                    return false;
-        //                }
-        //            } else if (foundRows[i][1].ToString() == "ANY" || foundRows[i][1].ToString() == iDmc.MachineType)
-        //            {
-                        
-        //            }
-        //        }
-        //    }
-        //}
+        private DataRow[] checkRules(DMC iDmc) //Not Finished
+        {
+            int colIndex = 0;
+            string expression = "controlType='" + iDmc.OSPType + "' OR controlType = 'ANY' OR controlType LIKE '%|" + iDmc.OSPType + "|%' OR controlType LIKE '*|" + iDmc.OSPType + "'" +
+                                "OR controlType LIKE '" + iDmc.OSPType + "|*'";
+            DataRow[] foundRows = rulesDS.Tables[0].Select(expression);
+           return foundRows;
+        
+            
+                for (var i = 0; i < foundRows.Count(); i++)
+                {
+                    
+                
+                    if (checkMachineTypeMatchesRule(foundRows[i][1].ToString(), iDmc.MachineType) == true)
+                    {
+                        if(checkOptionalRule(foundRows[i][2].ToString()) == true)
+                    {
+                        rulesLB.Items.Add(foundRows[i][3].ToString());
+                    }
+                    }
+                
+
+                //    if (foundRows[i][1].ToString().Contains("|"))
+                //    {
+                //        string[] results = foundRows[i][1].ToString().Split('|');
+                //        if (!results.Contains(iDmc.MachineType))
+                //        {
+                //            return false;
+                //        }
+                //    }
+                //    else if (foundRows[i][1].ToString() == "ANY" || foundRows[i][1].ToString() == iDmc.MachineType)
+                //    {
+
+                //    }
+                }
+            
+
+
+            
+        }
         public void checkIORev(List<string> piodFiles)
         {
 
@@ -321,6 +339,10 @@ namespace Diff_Tools
                     ioRevLbl.ForeColor = Color.Black;
                 }
             }
+        }
+        private void addNewRule_Click(object sender, EventArgs e)
+        {
+
         }
         private void Timer1_Tick(object sender, EventArgs e)
         {
@@ -473,6 +495,13 @@ namespace Diff_Tools
 
                     //highlightFlags(@"> C:\OSP-P\CNS-DAT\ENG\PIOD21-P239086BE.CNS", 'p');
                     //compareFiles(@"> LNC-38AQ-P300A", @"< LNC-38AM-P300A", diff.getOrigFileContents());
+                    //checkMachineTypeMatchesRule("P300M", "P300L");
+                    //compNCVerCriteria("LNC-28BF-P200","LNC-28BF-P200", "=");
+                    //compMPRMCriteria("MPRM01A*Z.PBU", "MPRM01A-02Z.PBU");
+                    //compSpecCodeCriteria("NC1|1|0|0");
+                    //compPLCUFCriteria("PLCUF11-MA001A.PBU", "PLCUF11-P123456.PBU");
+                    //checkOptionalRule("[SpecCode]=NC1:1:2:0|[MPRM]=MPRM02*");
+                    checkRules(dmc);
                 }
                 else
                 {
@@ -1278,5 +1307,221 @@ namespace Diff_Tools
             //string[] sepSpecCode = specCode.Split('-');
 
         }
+    
+        public bool checkMachineTypeMatchesRule(string machineTypeRule, string DMCmachineType)
+        {
+            string[] results = machineTypeRule.Split('|');
+           if ( results.Count() == 1 && machineTypeRule != DMCmachineType && machineTypeRule != "ANY")
+            {
+                MessageBox.Show("Results count = 1, machineTypeRule!=DMCmachineType, machineTypeRule!=ANY");
+                return false;
+            } 
+        else if ( results.Count() > 1)
+            {
+                for (var i = 0; i < results.Count(); i++)
+                {
+                    if (results[i] == DMCmachineType)
+                    {
+
+                        MessageBox.Show("results count > 1, Condition is true");
+                    return true;
+                    }
+                }
+                MessageBox.Show("results count > 1, No Match!");
+            return false;
+            }
+            MessageBox.Show("There is a match");
+            return true;
+        }
+        public bool checkOptionalRule(string machineTypeRule)
+        {
+
+            string[] splitRule = machineTypeRule.Split('|');
+            for (var i = 0; i < splitRule.Count(); i++)
+            {
+                int categoryEndIndex = splitRule[i].IndexOf("]") + 1;
+                switch (splitRule[i].Substring(0, categoryEndIndex))
+                {
+                    case "[NC]":
+                        if (!compNCVerCriteria(splitRule[i].Substring(categoryEndIndex + 1), dmc.NcVer, splitRule[i].Substring(categoryEndIndex, 1)))
+                        {
+                            return false;
+                        }
+                        break;
+
+                    case "[PLC]":
+                           
+                        break;
+
+                    case "[PLCS]":
+
+                        break;
+
+                    case "[MPRM]":
+                        if (!compMPRMCriteria(splitRule[i].Substring(categoryEndIndex + 1), dmc.MPRM))
+                        {
+                            return false;
+                        }
+                        break;
+
+                    case "[PLCUF]":
+                        if (!compPLCUFCriteria(splitRule[i].Substring(categoryEndIndex + 1), dmc.PLCUF))
+                        {
+                            return false;
+                        }
+                        break;
+
+                    case "[PLTUA]":
+
+                        break;
+
+                    case "[SPECCODE]":
+                        //string[] splitSpecCode = splitRule[i].Split('|');
+                        if (!compSpecCodeCriteria(splitRule[i].Substring(categoryEndIndex + 1)))
+                        {
+                            return false;
+                        }
+                        break;
+                    case "[WIN]":
+                        if (!compWinVerCriteria(splitRule[i].Substring(categoryEndIndex + 1), dmc.WinVersion))
+                        {
+                            return false;
+                        }
+                        break;
+                }
+            }
+            return true;
+        } //NOT FINISHED / NEED TO TEST
+        
+
+        //Rule checker criteria 3 subfunctions
+        public bool compWinVerCriteria(string ruleWinVersion, string dmcWinVersion)
+        {
+            int result = string.Compare(dmcWinVersion, ruleWinVersion);
+            if (result != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool compNCVerCriteria(string ruleNCVersion, string dmcNCVersion, string comparator)
+        {
+            int result = string.Compare(dmcNCVersion, ruleNCVersion);
+            switch (comparator)
+            {
+                case "=":
+                    if (result != 0)
+                    {
+                        return false;
+                    }
+                    break;
+
+                case "≥":
+                    if (result == -1)
+                    {
+                        return false;
+                    }
+                    break;
+                case "≤":
+                    if (result == 1)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+        public bool compMPRMCriteria(string ruleMPRMVersion, string dmcMPRMVersion)
+        {
+            
+            if (!ruleMPRMVersion.Contains("*") && string.Compare(dmcMPRMVersion, ruleMPRMVersion) != 0)
+            {
+                return false;
+            }
+
+            if (ruleMPRMVersion.Contains("*"))
+            {
+                int ruleMPRMwildcardIndex = ruleMPRMVersion.IndexOf("*");
+                string trimmedDMCMPRM = dmcMPRMVersion.Substring(0, ruleMPRMwildcardIndex) + "*" + dmcMPRMVersion.Substring(dmcMPRMVersion.Length -((ruleMPRMVersion.Length - 1) - ruleMPRMwildcardIndex));
+                if (string.Compare(trimmedDMCMPRM, ruleMPRMVersion) != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public bool compSpecCodeCriteria(string ruleSpecCode)
+        {
+            string[] seperatedRule = ruleSpecCode.Split(':');
+            int no = Int32.Parse(seperatedRule[1]);
+            int bit = Int32.Parse(seperatedRule[2]);
+            if (seperatedRule[3] == "0" && HasSpecCode(seperatedRule[0], no, bit))
+            {
+                return false;
+            }
+
+            if (seperatedRule[3] == "1" && !HasSpecCode(seperatedRule[0], no, bit))
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool compPLCUFCriteria(string rulePLCUFVersion, string dmcPLCUFVersion)
+        {
+            if (!rulePLCUFVersion.Contains("*") && string.Compare(dmcPLCUFVersion, rulePLCUFVersion) != 0)
+            {
+                return false;
+            }
+
+            if (rulePLCUFVersion.Contains("*"))
+            {
+                int rulePLCUFwildcardIndex = rulePLCUFVersion.IndexOf("*");
+                string trimmedDMCPLCUF = dmcPLCUFVersion.Substring(0, rulePLCUFwildcardIndex) + "*" + dmcPLCUFVersion.Substring(dmcPLCUFVersion.Length - ((rulePLCUFVersion.Length - 1) - rulePLCUFwildcardIndex));
+                if (string.Compare(trimmedDMCPLCUF, rulePLCUFVersion) != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public bool compPLTUACriteria(string rulePLTUAVersion, string dmcPLTUAVersion)
+        {
+            if (!rulePLTUAVersion.Contains("*") && string.Compare(dmcPLTUAVersion, rulePLTUAVersion) != 0)
+            {
+                return false;
+            }
+
+            if (rulePLTUAVersion.Contains("*"))
+            {
+                int rulePLTUAwildcardIndex = rulePLTUAVersion.IndexOf("*");
+                string trimmedDMCPLTUA = dmcPLTUAVersion.Substring(0, rulePLTUAwildcardIndex) + "*" + dmcPLTUAVersion.Substring(dmcPLTUAVersion.Length - ((rulePLTUAVersion.Length - 1) - rulePLTUAwildcardIndex));
+                if (string.Compare(trimmedDMCPLTUA, rulePLTUAVersion) != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        } //NEED TO TEST
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        
+        private void addNewRuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WizardFrmParent wizardFrmParent = new WizardFrmParent();
+            wizardFrmParent.ShowDialog();
+            //controlTypeForm.ShowDialog();
+        }
+
+        private void viewExistingRulesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            popRulesDT();
+            ExistingForm exform = new ExistingForm(rulesDS);
+            exform.ShowDialog();
+        }
     }
+
 }

@@ -62,18 +62,67 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Diff.cs" />
-    <Compile Include="DMC.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="AdditionalRulesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="AdditionalRulesForm.Designer.cs">
+      <DependentUpon>AdditionalRulesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlTypeForm.Designer.cs">
+      <DependentUpon>ControlTypeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Diff.cs" />
+    <Compile Include="DMC.cs" />
+    <Compile Include="ExistingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExistingForm.Designer.cs">
+      <DependentUpon>ExistingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MachineTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MachineTypeForm.Designer.cs">
+      <DependentUpon>MachineTypeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Rule.cs" />
+    <Compile Include="RuleDescriptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RuleDescriptionForm.Designer.cs">
+      <DependentUpon>RuleDescriptionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardFrmParent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WizardFrmParent.Designer.cs">
+      <DependentUpon>WizardFrmParent.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AdditionalRulesForm.resx">
+      <DependentUpon>AdditionalRulesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlTypeForm.resx">
+      <DependentUpon>ControlTypeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExistingForm.resx">
+      <DependentUpon>ExistingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MachineTypeForm.resx">
+      <DependentUpon>MachineTypeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,6 +133,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RuleDescriptionForm.resx">
+      <DependentUpon>RuleDescriptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardFrmParent.resx">
+      <DependentUpon>WizardFrmParent.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="API_Version.csv" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
