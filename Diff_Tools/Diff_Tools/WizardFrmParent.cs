@@ -18,7 +18,7 @@ namespace Diff_Tools
         static AdditionalRulesForm addRlFrm;
         static RuleDescriptionForm ruleDescFrm;
         static Form[] frm;
-        string[] frmDescription = { "Select the Control Type(s) for the new rule: ", "Select the Machine Type(s) for the new rule: ", "Select Additional Criteria for the new rule: ", "Add a description for the new rule:"};
+        readonly string[] frmDescription = { "Select the Control Type(s) for the new rule: ", "Select the Machine Type(s) for the new rule: ", "Select Additional Criteria for the new rule: ", "Add a description for the new rule:"};
         int top = 0;
         int count;
         public static Rule currentRule;
@@ -58,8 +58,6 @@ namespace Diff_Tools
             this.pnlContent.Controls.Add(frm[top]);
             frmDescriptionLbl.Text = frmDescription[top];
             frm[top].Show();
-            //ruleWizardProgressBar.Step = 1;
-            //ruleWizardProgressBar.PerformStep();
         }
         
         private void Next()
@@ -83,6 +81,7 @@ namespace Diff_Tools
                 if (result == DialogResult.Yes)
                 {
                     AppendRuleToCSVFile();
+                    this.Close();
                 }
                 return;
             }
@@ -95,8 +94,6 @@ namespace Diff_Tools
                 ruleWizardProgressBar.PerformStep();
                 if (top + 1 == count)
                 {
-                    //wizardNextBtn.Enabled = false;
-                    //wizardNextBtn.Visible = false;
                     EnableUploadButton();
                 }
             }
@@ -106,30 +103,6 @@ namespace Diff_Tools
             }
             
         }
-
-        //private void Next()
-        //{
-        //    top++;
-        //    if (top >= count)
-        //    {
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show(ctrlTypFrm.ReturnFrmSelection());
-        //        wizardBackBtn.Enabled = true;
-        //        wizardNextBtn.Enabled = true;
-        //        LoadNextForm();
-        //        if (top + 1 == count)
-        //        {
-        //            wizardNextBtn.Enabled = false;
-        //        }
-        //    }
-        //    if ( top <= 0)
-        //    {
-        //        wizardBackBtn.Enabled = false;
-        //    }
-        //}
         private void EnableUploadButton()
         {
             wizardNextBtn.Visible = false;
@@ -183,25 +156,13 @@ namespace Diff_Tools
             }
         }
 
-        private void AppendRuleToCSVFile()
+        public void AppendRuleToCSVFile()
         {
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.csv";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             File.AppendAllText(filePath, Environment.NewLine + currentRule.GetCompleteRule());
+            
         }
-        private bool IsCurrentFormComplete()
-        {
-            switch (top)
-            {
-                case 0:
-                    if (!ctrlTypFrm.IsFrmComplete())
-                    {
-                        return false;
-                    }
-                    break;
-            }
-            return true;
-        }
-
         private void WizardFrmParent_Load(object sender, EventArgs e)
         {
             ctrlTypFrm = new ControlTypeForm();
@@ -211,7 +172,6 @@ namespace Diff_Tools
             frm = new Form[4] { ctrlTypFrm, mchTypFrm, addRlFrm, ruleDescFrm };
             currentRule = new Rule();
             LoadNewForm();
-            //Next();
         }
 
         private void wizardNextBtn_Click(object sender, EventArgs e)
@@ -229,7 +189,7 @@ namespace Diff_Tools
             this.Close();
         }
 
-        private bool CheckFrmsComplete(int index) //Need to add conditions for MachineTypeForm and AdditionalRulesForm
+        private bool CheckFrmsComplete(int index)
         {
             switch (index)
             {

@@ -12,9 +12,6 @@ namespace Diff_Tools
         private List<string> trimFileContents = new List<string>();
         private List<string> hexIndex;
         private List<string> fileSection = new List<string>();
-        private bool aotFlag = false;
-        private bool safetyFlag = false;
-        private bool apiFlag = false;
         private List<string> safetyFiles = new List<string>();
         private List<string> ioFiles = new List<string>();
         private string serialNumber = "";
@@ -64,93 +61,93 @@ namespace Diff_Tools
         public bool ApiFlag
         { get; set; }
 
-        public List<string> getioFiles()
+        public List<string> GetIOFiles()
         {
             return ioFiles;
         }
 
-        public string getioFiles(int index)
+        public string GetIOFiles(int index)
         {
             return ioFiles[index];
         }
 
-        public void addioFiles(string value)
+        public void AddIOFiles(string value)
         {
             ioFiles.Add(value);
         }
 
-        public List<string> getFileSection()
+        public List<string> GetFileSection()
         {
             return fileSection;
         }
 
-        public string getFileSection(int index)
+        public string GetFileSection(int index)
         {
             return fileSection[index];
         }
 
-        public void addFileSection(string value)
+        public void AddFileSection(string value)
         {
             fileSection.Add(value);
         }
 
-        public void setHexIndex(List<string> value)
+        public void SetHexIndex(List<string> value)
         {
             hexIndex = value;
         }
 
-        public List<string> getHexIndex()
+        public List<string> GetHexIndex()
         {
             return hexIndex;
         }
 
-        public string getHexIndex(int index)
+        public string GetHexIndex(int index)
         {
             return hexIndex[index];
         }
 
-        public List<string> getTrimFileContents()
+        public List<string> GetTrimFileContents()
         {
             return trimFileContents;
         }
 
-        public string getTrimFileContents(int index)
+        public string GetTrimFileContents(int index)
         {
             return trimFileContents[index];
         }
 
-        public void setTrimFileContents(List<string> value)
+        public void SetTrimFileContents(List<string> value)
         {
             trimFileContents = value;
         }
 
-        public string getOrigFileContents(int index)
+        public string GetOrigFileContents(int index)
         {
             return origFileContents[index];
         }
 
-        public List<string> getOrigFileContents()
+        public List<string> GetOrigFileContents()
         {
             return origFileContents;
         }
 
-        public void addOrigFileContents(string value)
+        public void AddOrigFileContents(string value)
         {
             origFileContents.Add(value);
         }
 
 
-        public List<string> getSafetyFiles()
+        public List<string> GetSafetyFiles()
         {
             return safetyFiles;
         }
 
-        public string getSafetyFiles(int index)
+        public string GetSafetyFiles(int index)
         {
             return safetyFiles[index];
         }
 
-        public void addSafetyFiles(string value)
+        public void AddSafetyFiles(string value)
         {
             safetyFiles.Add(value);
         }

@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RuleDescriptionForm));
             this.ruleDescRichTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.uploadBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ruleDescRichTextBox
@@ -53,23 +51,12 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Enter the text that should show when this rule is detected:";
             // 
-            // uploadBtn
-            // 
-            this.uploadBtn.Image = ((System.Drawing.Image)(resources.GetObject("uploadBtn.Image")));
-            this.uploadBtn.Location = new System.Drawing.Point(175, 254);
-            this.uploadBtn.Name = "uploadBtn";
-            this.uploadBtn.Size = new System.Drawing.Size(40, 41);
-            this.uploadBtn.TabIndex = 2;
-            this.uploadBtn.UseVisualStyleBackColor = true;
-            this.uploadBtn.Click += new System.EventHandler(this.uploadBtn_Click);
-            // 
             // RuleDescriptionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(476, 386);
-            this.Controls.Add(this.uploadBtn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ruleDescRichTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -84,6 +71,5 @@
 
         private System.Windows.Forms.RichTextBox ruleDescRichTextBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button uploadBtn;
     }
 }

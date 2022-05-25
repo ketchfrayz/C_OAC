@@ -42,8 +42,8 @@ namespace Diff_Tools
             this.label5 = new System.Windows.Forms.Label();
             this.ncLbl = new System.Windows.Forms.Label();
             this.ncTB = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.ncControlTypeLbl = new System.Windows.Forms.Label();
+            this.ncHyphen = new System.Windows.Forms.Label();
+            this.lncControlTypeLbl = new System.Windows.Forms.Label();
             this.plcCB = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.plcTB = new System.Windows.Forms.TextBox();
@@ -74,11 +74,15 @@ namespace Diff_Tools
             this.mncCtrlTypeLbl = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.mncVerTB = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.mncHyphenLbl = new System.Windows.Forms.Label();
             this.winVersionCB = new System.Windows.Forms.ComboBox();
             this.winVersionGB = new System.Windows.Forms.GroupBox();
             this.winTypeLbl = new System.Windows.Forms.Label();
             this.vsysGB = new System.Windows.Forms.GroupBox();
+            this.vsysLbl = new System.Windows.Forms.Label();
+            this.vsysTB = new System.Windows.Forms.TextBox();
+            this.vsysChkB = new System.Windows.Forms.CheckBox();
+            this.vsysCB = new System.Windows.Forms.ComboBox();
             this.specCodeGB.SuspendLayout();
             this.lncGB.SuspendLayout();
             this.mprmGB.SuspendLayout();
@@ -86,6 +90,7 @@ namespace Diff_Tools
             this.plcufGB.SuspendLayout();
             this.mncGB.SuspendLayout();
             this.winVersionGB.SuspendLayout();
+            this.vsysGB.SuspendLayout();
             this.SuspendLayout();
             // 
             // criteriaCB
@@ -255,25 +260,25 @@ namespace Diff_Tools
             this.ncTB.TabIndex = 21;
             this.ncTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label2
+            // ncHyphen
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(102, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(10, 13);
-            this.label2.TabIndex = 22;
-            this.label2.Text = "-";
+            this.ncHyphen.AutoSize = true;
+            this.ncHyphen.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ncHyphen.Location = new System.Drawing.Point(102, 16);
+            this.ncHyphen.Name = "ncHyphen";
+            this.ncHyphen.Size = new System.Drawing.Size(10, 13);
+            this.ncHyphen.TabIndex = 22;
+            this.ncHyphen.Text = "-";
             // 
-            // ncControlTypeLbl
+            // lncControlTypeLbl
             // 
-            this.ncControlTypeLbl.AutoSize = true;
-            this.ncControlTypeLbl.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ncControlTypeLbl.Location = new System.Drawing.Point(118, 16);
-            this.ncControlTypeLbl.Name = "ncControlTypeLbl";
-            this.ncControlTypeLbl.Size = new System.Drawing.Size(39, 13);
-            this.ncControlTypeLbl.TabIndex = 23;
-            this.ncControlTypeLbl.Text = "P300A";
+            this.lncControlTypeLbl.AutoSize = true;
+            this.lncControlTypeLbl.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lncControlTypeLbl.Location = new System.Drawing.Point(118, 16);
+            this.lncControlTypeLbl.Name = "lncControlTypeLbl";
+            this.lncControlTypeLbl.Size = new System.Drawing.Size(39, 13);
+            this.lncControlTypeLbl.TabIndex = 23;
+            this.lncControlTypeLbl.Text = "P300A";
             // 
             // plcCB
             // 
@@ -348,10 +353,10 @@ namespace Diff_Tools
             // 
             this.lncGB.Controls.Add(this.conditionalNCcb);
             this.lncGB.Controls.Add(this.lOrHCB);
-            this.lncGB.Controls.Add(this.ncControlTypeLbl);
+            this.lncGB.Controls.Add(this.lncControlTypeLbl);
             this.lncGB.Controls.Add(this.ncLbl);
             this.lncGB.Controls.Add(this.ncTB);
-            this.lncGB.Controls.Add(this.label2);
+            this.lncGB.Controls.Add(this.ncHyphen);
             this.lncGB.Location = new System.Drawing.Point(6, 154);
             this.lncGB.Name = "lncGB";
             this.lncGB.Size = new System.Drawing.Size(273, 46);
@@ -478,9 +483,9 @@ namespace Diff_Tools
             this.plcufGB.Controls.Add(this.plcufVerCB);
             this.plcufGB.Controls.Add(this.label3);
             this.plcufGB.Location = new System.Drawing.Point(224, 328);
-            this.plcufGB.Margin = new System.Windows.Forms.Padding(1);
+            this.plcufGB.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.plcufGB.Name = "plcufGB";
-            this.plcufGB.Padding = new System.Windows.Forms.Padding(1);
+            this.plcufGB.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.plcufGB.Size = new System.Drawing.Size(246, 42);
             this.plcufGB.TabIndex = 35;
             this.plcufGB.TabStop = false;
@@ -538,7 +543,7 @@ namespace Diff_Tools
             this.mncGB.Controls.Add(this.mncCtrlTypeLbl);
             this.mncGB.Controls.Add(this.label10);
             this.mncGB.Controls.Add(this.mncVerTB);
-            this.mncGB.Controls.Add(this.label11);
+            this.mncGB.Controls.Add(this.mncHyphenLbl);
             this.mncGB.Location = new System.Drawing.Point(5, 201);
             this.mncGB.Name = "mncGB";
             this.mncGB.Size = new System.Drawing.Size(308, 42);
@@ -666,15 +671,16 @@ namespace Diff_Tools
             this.mncVerTB.TabIndex = 33;
             this.mncVerTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label11
+            // mncHyphenLbl
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(96, 14);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(10, 13);
-            this.label11.TabIndex = 34;
-            this.label11.Text = "-";
+            this.mncHyphenLbl.AutoSize = true;
+            this.mncHyphenLbl.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mncHyphenLbl.Location = new System.Drawing.Point(96, 14);
+            this.mncHyphenLbl.Name = "mncHyphenLbl";
+            this.mncHyphenLbl.Size = new System.Drawing.Size(10, 13);
+            this.mncHyphenLbl.TabIndex = 34;
+            this.mncHyphenLbl.Text = "-";
+            this.mncHyphenLbl.Click += new System.EventHandler(this.mncHyphenLbl_Click);
             // 
             // winVersionCB
             // 
@@ -709,11 +715,57 @@ namespace Diff_Tools
             // 
             // vsysGB
             // 
-            this.vsysGB.Location = new System.Drawing.Point(312, 167);
+            this.vsysGB.Controls.Add(this.vsysCB);
+            this.vsysGB.Controls.Add(this.vsysChkB);
+            this.vsysGB.Controls.Add(this.vsysTB);
+            this.vsysGB.Controls.Add(this.vsysLbl);
+            this.vsysGB.Location = new System.Drawing.Point(321, 167);
             this.vsysGB.Name = "vsysGB";
-            this.vsysGB.Size = new System.Drawing.Size(150, 52);
+            this.vsysGB.Size = new System.Drawing.Size(222, 52);
             this.vsysGB.TabIndex = 42;
             this.vsysGB.TabStop = false;
+            this.vsysGB.Visible = false;
+            // 
+            // vsysLbl
+            // 
+            this.vsysLbl.AutoSize = true;
+            this.vsysLbl.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.vsysLbl.Location = new System.Drawing.Point(8, 20);
+            this.vsysLbl.Name = "vsysLbl";
+            this.vsysLbl.Size = new System.Drawing.Size(35, 13);
+            this.vsysLbl.TabIndex = 0;
+            this.vsysLbl.Text = "VSYS";
+            // 
+            // vsysTB
+            // 
+            this.vsysTB.Location = new System.Drawing.Point(43, 16);
+            this.vsysTB.Name = "vsysTB";
+            this.vsysTB.Size = new System.Drawing.Size(54, 20);
+            this.vsysTB.TabIndex = 1;
+            this.vsysTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // vsysChkB
+            // 
+            this.vsysChkB.AutoSize = true;
+            this.vsysChkB.Location = new System.Drawing.Point(106, 20);
+            this.vsysChkB.Name = "vsysChkB";
+            this.vsysChkB.Size = new System.Drawing.Size(15, 14);
+            this.vsysChkB.TabIndex = 2;
+            this.vsysChkB.UseVisualStyleBackColor = true;
+            // 
+            // vsysCB
+            // 
+            this.vsysCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.vsysCB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.vsysCB.FormattingEnabled = true;
+            this.vsysCB.Items.AddRange(new object[] {
+            "",
+            "or higher",
+            "or lower"});
+            this.vsysCB.Location = new System.Drawing.Point(124, 16);
+            this.vsysCB.Name = "vsysCB";
+            this.vsysCB.Size = new System.Drawing.Size(82, 21);
+            this.vsysCB.TabIndex = 36;
             // 
             // AdditionalRulesForm
             // 
@@ -750,6 +802,8 @@ namespace Diff_Tools
             this.mncGB.ResumeLayout(false);
             this.mncGB.PerformLayout();
             this.winVersionGB.ResumeLayout(false);
+            this.vsysGB.ResumeLayout(false);
+            this.vsysGB.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -769,8 +823,8 @@ namespace Diff_Tools
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label ncLbl;
         private System.Windows.Forms.TextBox ncTB;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label ncControlTypeLbl;
+        private System.Windows.Forms.Label ncHyphen;
+        private System.Windows.Forms.Label lncControlTypeLbl;
         private System.Windows.Forms.ComboBox plcCB;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox plcTB;
@@ -799,12 +853,16 @@ namespace Diff_Tools
         private System.Windows.Forms.Label mncCtrlTypeLbl;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox mncVerTB;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label mncHyphenLbl;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox winVersionCB;
         private System.Windows.Forms.GroupBox winVersionGB;
         private System.Windows.Forms.Label winTypeLbl;
         private System.Windows.Forms.GroupBox vsysGB;
+        private System.Windows.Forms.ComboBox vsysCB;
+        private System.Windows.Forms.CheckBox vsysChkB;
+        private System.Windows.Forms.TextBox vsysTB;
+        private System.Windows.Forms.Label vsysLbl;
     }
 }

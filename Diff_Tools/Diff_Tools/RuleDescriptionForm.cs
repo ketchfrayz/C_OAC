@@ -31,17 +31,6 @@ namespace Diff_Tools
 
         private void uploadBtn_Click(object sender, EventArgs e)
         {
-            string rule = "";
-            string displayRule = "";
-            if (IsFrmComplete())
-            {
-
-                WizardFrmParent.rule.Push(ruleDescRichTextBox.Text);
-                WizardFrmParent.currentRule.SetRuleWizard(WizardFrmParent.rule);
-                //rule = WizardFrmParent.currentRule.CreateRuleFromStack();
-               // displayRule = WizardFrmParent.currentRule.CreateDisplayRule();
-                MessageBox.Show("Do you want to submit the rule: " + Environment.NewLine + Environment.NewLine + displayRule, "Rule Confirmation", MessageBoxButtons.YesNo);
-            }
         }
     }
 }

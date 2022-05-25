@@ -12,17 +12,13 @@ namespace Diff_Tools
 {
     public partial class ControlTypeForm : Form
     {
-        MachineTypeForm machineTypeForm = new MachineTypeForm();
         public ControlTypeForm()
         {
             InitializeComponent();
         }
 
-        private void  NextBtn_Click(object sender, System.EventArgs e) //Not completed, only updated to test flow of wizard
-        {
-            this.Visible = false;
-            machineTypeForm.ShowDialog();
-            
+        private void  NextBtn_Click(object sender, System.EventArgs e)
+        {  
         }
         private void ExitBtn_Click(object sender, System.EventArgs e)
         {
@@ -44,7 +40,7 @@ namespace Diff_Tools
                 for (var i = 0; i < controlTypeLB.SelectedItems.Count; i++)
                 {
                    
-                    int compareResult = 0;
+                    int compareResult;
                     if( i == 0)
                     {
                         machineType = controlTypeLB.SelectedItems[i].ToString().Substring(4, 1);

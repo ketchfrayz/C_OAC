@@ -13,18 +13,17 @@ namespace Diff_Tools
 {
     public partial class AdditionalRulesForm : Form
     {
-        static string[] latheCriteria = { "LNC", "PLC", "SPEC CODE", "WIN VERSION", "VSYS" };
-        static string[] mcCriteria = { "MNC", "PLC", "SPEC CODE", "WIN VERSION", "VSYS", "MPRM", "PLTUA", "PLCUF" };
-        static string[] mcSpecType = { "NC1", "NCB1", "PLC1", "PLC2" };
-        static string[] latheSpecType = { "NC1", "NCB1", "NCB2", "PLC1", "PLC2", "PLC3" };
-        static string[] lathePLC = { "LU2", "LU3" };
-        static string[] mcPLC = { "MA2", "MA3" };
-        static string[] winVersionP100 = { "1.4.0.E" };
-        static string[] winVersionP200 = { "2.4.0.E" };
-        static string[] winVersionP200A = { "2.4.0.E", "5.0.0.E", "6.0.0.P", "6.0.0.U", "6.0.1.P", "6.0.1.U", "6.1.0.P", "6.1.0.U" };
-        static string[] winVersionP300A = { "7.0.0.P", "7.0.0.U", "7.1.0.P", "7.1.0.U", "8.0.0.E" };
-        static string[] winDescriptionP300A = { "Windows 7 Pro", "Windows 7 Ultimate", "Windows 7 Pro SP1", "Windows 7 Pro Ultimate", "Windows 10" };
-        static ArrayList criteriaArrayList = new ArrayList();
+        readonly string[] latheCriteria = { "LNC", "PLC", "SPEC CODE", "WIN VERSION", "VSYS" };
+        readonly string[] mcCriteria = { "MNC", "PLC", "SPEC CODE", "WIN VERSION", "VSYS", "MPRM", "PLTUA", "PLCUF" };
+        readonly string[] mcSpecType = { "NC1", "NCB1", "PLC1", "PLC2" };
+        readonly string[] latheSpecType = { "NC1", "NCB1", "NCB2", "PLC1", "PLC2", "PLC3" };
+        readonly string[] lathePLC = { "LU2", "LU3" };
+        readonly string[] mcPLC = { "MA2", "MA3" };
+        readonly string[] winVersionP100 = { "1.4.0.E" };
+        readonly string[] winVersionP200 = { "2.4.0.E" };
+        readonly string[] winVersionP200A = { "2.4.0.E", "5.0.0.E", "6.0.0.P", "6.0.0.U", "6.0.1.P", "6.0.1.U", "6.1.0.P", "6.1.0.U" };
+        readonly string[] winVersionP300A = { "7.0.0.P", "7.0.0.U", "7.1.0.P", "7.1.0.U", "8.0.0.E" };
+        readonly ArrayList criteriaArrayList = new ArrayList();
         public AdditionalRulesForm()
         {
             InitializeComponent();
@@ -59,6 +58,16 @@ namespace Diff_Tools
             {
                 temp = controlType.Substring(0, 4) + "A";
             }
+
+            if ( controlType.Length == 9)
+            {
+                temp = controlType.Substring(0, 4);
+            }
+
+            if (controlType.Length == 10)
+            {
+                temp = controlType.Substring(0, 4) + "A";
+            }
             switch (temp)
             {
                 case "P100":
@@ -84,6 +93,86 @@ namespace Diff_Tools
 
         }
 
+        private void UpdateMNCControlLbl(string controlType)
+        {
+            switch (controlType)
+            {
+                case "P100M":
+                    mncHyphenLbl.Visible = false;
+                    mncCtrlTypeLbl.Visible = false;
+                    break;
+                case "P200M":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P200";
+                    break;
+                case "P200MA":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P200A";
+                    break;
+                case "P300M":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P300";
+                    break;
+                case "P300S (M)":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P300";
+                    break;
+                case "P300MA":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P300A";
+                    break;
+                case "P300SA (M)":
+                    mncHyphenLbl.Visible = true;
+                    mncCtrlTypeLbl.Visible = true;
+                    mncCtrlTypeLbl.Text = "P300A";
+                    break;
+            }
+        }
+        private void UpdateLNCControlLbl(string controlType)
+        {
+            switch (controlType)
+            {
+                case "P100L":
+                    ncHyphen.Visible = false;
+                    lncControlTypeLbl.Visible = false;
+                    break;
+                case "P200L":
+                    ncHyphen.Visible=true;
+                    lncControlTypeLbl.Visible=true;
+                    lncControlTypeLbl.Text = "P200";
+                    break;
+                case "P200LA":
+                    ncHyphen.Visible = true;
+                    lncControlTypeLbl.Visible = true;
+                    lncControlTypeLbl.Text = "P200A";
+                    break;
+                case "P300L":
+                    ncHyphen.Visible = true;
+                    lncControlTypeLbl.Visible = true;
+                    lncControlTypeLbl.Text = "P300";
+                    break;
+                case "P300S (L)":
+                    ncHyphen.Visible = true;
+                    lncControlTypeLbl.Visible = true;
+                    lncControlTypeLbl.Text = "P300";
+                    break;
+                case "P300LA":
+                    ncHyphen.Visible = true;
+                    lncControlTypeLbl.Visible = true;
+                    lncControlTypeLbl.Text = "P300A";
+                    break;
+                case "P300SA (L)":
+                    ncHyphen.Visible = true;
+                    lncControlTypeLbl.Visible = true;
+                    lncControlTypeLbl.Text = "P300A";
+                    break;
+            }
+        }
        
 
         private void ShowSelectedControls(string ruleType)
@@ -92,12 +181,14 @@ namespace Diff_Tools
             {
                 case "LNC":
                     ClearLNCControls();
+                    UpdateLNCControlLbl(WizardFrmParent.currentRule.GetControlType());
                     lncGB.Location = new Point(35, 100);
                     lncGB.Visible = true;
                     return;
 
                 case "MNC":
                     ClearMNCControls();
+                    UpdateMNCControlLbl(WizardFrmParent.currentRule.GetControlType());
                     mncGB.Location = new Point(35, 100);
                     mncGB.Visible = true;
                     return;
@@ -126,6 +217,11 @@ namespace Diff_Tools
                     winVersionGB.Location = new Point(35, 100);
                     winVersionGB.Visible = true;
                     return;
+                case "VSYS":
+                    ClearVSYScontrols();
+                    vsysGB.Location = new Point(35, 100);
+                    vsysGB.Visible = true;
+                    return;
                 
                 
             }
@@ -141,6 +237,7 @@ namespace Diff_Tools
             specCodeGB.Visible = false;
             plcufGB.Visible = false;
             winVersionGB.Visible = false;
+            vsysGB.Visible = false;
         }
 
         private void criteriaCB_SelectedIndexChanged(object sender, EventArgs e)
@@ -230,7 +327,16 @@ namespace Diff_Tools
                     if (IsWinVersionInputCompleteSub() == true)
                     {
                         AddCriteriaWinVersionSub();
-                        criteriaCB.SelectedIndex= -1; 
+                        criteriaCB.SelectedIndex= -1;
+                       
+                    }
+                    break;
+                case "VSYS":
+                    if (IsVSYSInputCompleteSub() == true)
+                    {
+                        AddCriteriaVSYSSub();
+                        criteriaCB.SelectedIndex = -1;
+                    
                     }
                     break;
 
@@ -240,24 +346,41 @@ namespace Diff_Tools
 
         private void AddCriteriaLNCSub()
         {
-            string tempArrayListRule = "";
+            string tempArrayListRule;
             if (lOrHCB.Checked == false)
             {
-                tempArrayListRule = "[NC]=LNC-" + ncTB.Text + "-" + ncControlTypeLbl.Text;
+                tempArrayListRule = "[NC]=LNC-" + ncTB.Text + "-" + lncControlTypeLbl.Text;
                 criteriaArrayList.Add(tempArrayListRule);
                 currentCriteriaLB.Items.Add(tempArrayListRule, CheckState.Checked);
                 return;
             }
             string conditionalNC = conditionalNCcb.SelectedItem.ToString();
             tempArrayListRule = conditionalNC == "or higher" ? "[NC]≥LNC-" : "[NC]≤LNC-";
-            tempArrayListRule += ncTB.Text + "-" + ncControlTypeLbl.Text;
+            tempArrayListRule += ncTB.Text + "-" + lncControlTypeLbl.Text;
             criteriaArrayList.Add(tempArrayListRule);
             currentCriteriaLB.Items.Add(tempArrayListRule, CheckState.Checked);
         }
 
+        private void AddCriteriaVSYSSub()
+        {
+            string tempArraryListRule;
+            if (vsysChkB.Checked == false)
+            {
+                tempArraryListRule = "[VSYS]=VSYS" + vsysTB.Text;
+                criteriaArrayList.Add(tempArraryListRule);
+                currentCriteriaLB.Items.Add(tempArraryListRule, CheckState.Checked);
+                return;
+            }
+            string conditionalVSYS = vsysCB.SelectedItem.ToString();
+            tempArraryListRule = conditionalVSYS == "or higher" ? "[VSYS]≥VSYS" : "[VSYS]≤VSYS";
+            tempArraryListRule += vsysTB.Text;
+            criteriaArrayList.Add(tempArraryListRule);
+            currentCriteriaLB.Items.Add(tempArraryListRule, CheckState.Checked);
+        }
+
         private void AddCriteriaMNCSub()
         {
-            string tempArrayListRule = "";
+            string tempArrayListRule;
             
             if (lOrHmncCB.Checked == false)
             {
@@ -271,15 +394,13 @@ namespace Diff_Tools
             tempArrayListRule = conditionalNC == "or higher" ? "[NC]≥MNC-" : "[NC]≤MNC-";
             tempArrayListRule += mncVerTB.Text + "-" + mncCtrlTypeLbl.Text;
             tempArrayListRule += mncNoCB.SelectedIndex != -1 ? "-" + mncNoCB.SelectedItem.ToString() : "";
-            criteriaArrayList.Add(tempArrayListRule);
-            //tempRule = "NC : MNC-" + mncVerTB.Text + "-" + mncCtrlTypeLbl.Text;
-            //tempRule += mncNoCB.SelectedIndex == -1 ? "-" +  
+            criteriaArrayList.Add(tempArrayListRule); 
             currentCriteriaLB.Items.Add(tempArrayListRule, CheckState.Checked);
         }
 
         private void AddCriteriaPLCSub()
         {
-            string tempArrayListRule = "";
+            string tempArrayListRule;
             if (lOrHPLCCB.Checked == false)
             {
                 tempArrayListRule = "[PLC]=" + plcCB.SelectedItem.ToString() + "-" + plcTB.Text;
@@ -307,7 +428,7 @@ namespace Diff_Tools
         }
         private void AddCriteriaWinVersionSub()
         {
-            criteriaArrayList.Add("[WINVERSION] =" + winVersionCB.SelectedItem.ToString());
+            criteriaArrayList.Add("[WINVERSION]=" + winVersionCB.SelectedItem.ToString());
             currentCriteriaLB.Items.Add("[WINVERSION] = " + winVersionCB.SelectedItem.ToString(), CheckState.Checked);
         }
         private void AddCriteriaPLCUFSub()
@@ -428,6 +549,22 @@ namespace Diff_Tools
             }
             return true;
         }
+        
+        private bool IsVSYSInputCompleteSub()
+        {
+            if (vsysTB.Text == "")
+            {
+                return false;
+            }
+            if (vsysChkB.Checked == true)
+            {
+                if(vsysCB.SelectedIndex == -1 || vsysCB.SelectedIndex == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private void ClearWinVersionControls()
         {
@@ -468,6 +605,13 @@ namespace Diff_Tools
         {
             mprmCB.SelectedIndex = -1;
             mprmTB.Text = "";
+        }
+
+        private void ClearVSYScontrols()
+        {
+            vsysTB.Text = "";
+            vsysChkB.Checked = false;
+            vsysCB.SelectedIndex = -1;
         }
 
         private void ClearPlcufControls()
@@ -566,33 +710,10 @@ namespace Diff_Tools
         {
 
         }
-        //private void AddCriteriaToLB()
-        //{
-        //    switch (criteriaCB.SelectedItem.ToString())
-        //    {
-        //        case "NC":
-        //            if (lOrHCB.Checked == false)
-        //            {
-        //                WizardFrmParent.rule.Push("[NC]=" + ncLbl.Text + "-" + ncTB.Text + "-" + ncControlTypeLbl.Text + "|");
-        //                return;
-        //            }
 
-        //            if (conditionalNCcb.SelectedItem.ToString() == "or higher")
-        //            {
-        //                WizardFrmParent.rule.Push("[NC]≥" + ncLbl.Text + "-" + ncTB.Text + "-" + ncControlTypeLbl.Text + "|");
-        //            }
-        //        case "PLC":
-        //            return;
-        //        case "SPEC CODE":
+        private void mncHyphenLbl_Click(object sender, EventArgs e)
+        {
 
-        //            return;
-        //        case "MPRM":
-        //            return;
-        //        case "PLCUF":
-        //            return;
-        //        case "PLTUA":
-        //            return;
-        //    }
-        //}
+        }
     }
 }

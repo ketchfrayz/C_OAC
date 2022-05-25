@@ -68,7 +68,6 @@ namespace Diff_Tools
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MachineTypeForm";
             this.Text = "Add New Rule Wizard";
-            this.Activated += new System.EventHandler(this.MachineTypeForm_Activated);
             this.Load += new System.EventHandler(this.MachineTypeForm_Load);
             this.ResumeLayout(false);
 

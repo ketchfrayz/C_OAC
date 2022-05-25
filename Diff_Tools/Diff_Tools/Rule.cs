@@ -70,9 +70,16 @@ namespace Diff_Tools
                     inputStack.Pop();
                 }
             }
-            
-            lOrM = inputStack.Peek().Substring(4, 1);
-            controlType = inputStack.Peek();
+            if (inputStack.Peek().Length > 6)
+            {
+                lOrM = inputStack.Peek().Substring(inputStack.Peek().Length - 2, 1);
+                controlType = inputStack.Peek();
+            }
+            else
+            {
+                lOrM = inputStack.Peek().Substring(4, 1);
+                controlType = inputStack.Peek();
+            }
         }
     }
 }

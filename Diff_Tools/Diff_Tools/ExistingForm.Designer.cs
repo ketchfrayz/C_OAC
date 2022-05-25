@@ -50,6 +50,8 @@ namespace Diff_Tools
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(509, 334);
             this.Controls.Add(this.ruleDGV);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ExistingForm";
             this.Text = "ExistingForm";
             this.Load += new System.EventHandler(this.ExistingForm_Load);

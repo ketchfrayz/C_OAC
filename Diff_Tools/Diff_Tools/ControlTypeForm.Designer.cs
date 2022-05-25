@@ -48,7 +48,8 @@ namespace Diff_Tools
             "P100L",
             "P300SA (M)",
             "P300MA",
-            "P300M (M)",
+            "P300S (M)",
+            "P300M",
             "P200MA",
             "P200M",
             "P100M"});

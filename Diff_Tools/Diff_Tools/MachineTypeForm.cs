@@ -13,6 +13,8 @@ namespace Diff_Tools
 {
     public partial class MachineTypeForm : Form
     {
+        private string[] p300SL = {"ANY", "MACT250", "MACT350", "MACT550", "MULT200", "MULT300", "MULT400", "MULT550", "MULT750", "MULT_U3000", "MULT_U4000", "VTM-100", "VTM-200", "VTM-65", "VTM-80YB", "VTM-120YB", "VTM-200YB", "VTM-1200YB", "VTM-2000YB", "VTR-160A", "VTR-350A" };
+        private string[] p300SM = {"ANY", "MU-4000V", "MU-5000V", "MU-6300V", "MU-8000V" };
         private DataSet machineDataSet = new DataSet();
         private DataTable machineDataTable = new DataTable();
         public MachineTypeForm()
@@ -24,7 +26,8 @@ namespace Diff_Tools
         
         private void ReadMachineXML()
         {
-            machineDataSet.ReadXml("C:\\Program Files\\Okuma\\Diff_Tools\\MachineList_THINC.xml");
+            machineDataSet.ReadXml("\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\MachineList_THINC.xml");
+            //machineDataSet.ReadXml("C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\MachineList_THINC.xml");
             machineDataTable = machineDataSet.Tables[0];
         }
 
@@ -33,15 +36,11 @@ namespace Diff_Tools
             this.Close();
         }
 
-        private void backBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public void PopMachineList(string code)
         {
             DataRow[] foundRows;
-            foundRows = machineDataSet.Tables[0].Select("type = '" + code + "'");  
+            foundRows = machineDataSet.Tables[0].Select("type = '" + code + "'");
+            machineTypeLB.Items.Add("ANY");
             for (var i = 0; i < foundRows.Count(); i++)
             {
                 machineTypeLB.Items.Add(foundRows[i][0]);
@@ -88,8 +87,20 @@ namespace Diff_Tools
 
         private void MachineTypeForm_Load(object sender, EventArgs e)
         {
+            machineTypeLB.Items.Clear();
             ReadMachineXML();
-            PopMachineList(WizardFrmParent.rule.Peek().Substring(4,1));
+            if (WizardFrmParent.rule.Peek().EndsWith("(L)"))
+            {
+                machineTypeLB.Items.AddRange(p300SL);
+            }
+            else if (WizardFrmParent.rule.Peek().EndsWith("(M)"))
+            {
+                machineTypeLB.Items.AddRange(p300SM);
+            }
+            else
+            {
+                PopMachineList(WizardFrmParent.rule.Peek().Substring(4, 1));
+            }
         }
 
         private void MachineTypeForm_Enter(object sender, EventArgs e)
@@ -112,8 +123,6 @@ namespace Diff_Tools
             machineTypeLB.Items.Add("ANY");
             PopMachineList(WizardFrmParent.rule.Peek().Substring(4, 1));
         }
-
-        
     }
    
 }

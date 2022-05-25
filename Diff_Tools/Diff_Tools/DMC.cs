@@ -24,13 +24,77 @@ namespace Diff_Tools
         private List<string> origDMCFileContents = new List<string>();
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
-                                                           "/(PLC2)"};
+                                                          "/(PLC2)", "/(PCG2)"};
+        private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)" };
+        private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)" };
+        private string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
+        private Regex machineTypeReg;
+        private Regex controlTypeReg;
+        private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
+                                                                                 "MW$", "W$" };
+        public bool IsBSpecPLC(string plcVer)
+        {
+            if(plcVer.Substring(4,1) != "Z")
+            {
+                return false;
+            }
+            return true;
+        }
 
+        public bool IsBSpecNC(string ncVer)
+        {
+            string[] splitNCVer = ncVer.Split('-');
+            if (splitNCVer[0] == "LNC") { 
+
+                if( splitNCVer.Count() < 4)
+                {
+                    return false;
+                }
+                if (!splitNCVer[3].StartsWith("Z"))
+                {
+                    return false;
+                }
+            }
+
+            if (splitNCVer[0] == "MNC")
+            {
+                if (!splitNCVer[2].StartsWith("Z"))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         public List<string> GetSpecSepIndex()
         {
             return specSepIndex;
         }
+        private string TrimMachineType(string machineType)
+        {
+            if (machineType == "L400II" || machineType == "L250II" || machineType == "MB-5000HII")
+            {
+                return machineType;
+            }
+            string outputMT = "";
+            for (var i = 0; i < latheMachineTypePattern.Length; i++)
+            {
+                machineTypeReg = new Regex(latheMachineTypePattern[i], RegexOptions.IgnoreCase);
+                if (machineTypeReg.IsMatch(machineType))
+                {
+                    outputMT = Regex.Replace(machineType, latheMachineTypePattern[i], "");
+                    break;
+                }
+            }
+            if (outputMT != "") 
+            { 
 
+                return outputMT;
+            }
+            else
+            {
+                return machineType;
+            }
+        }
         public string GetSpecSepIndex(int index)
         {
             return specSepIndex[index];
@@ -131,25 +195,25 @@ namespace Diff_Tools
         {
             //grab NC spec code data
             int startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.1 ]==============================");
-            for (var i = startIndex + 6;i <= startIndex + 80; i++)
+            for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
                 NC1.Add(origDMCFileContents[i]);
             }
 
             startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.2 ]==============================");
-            for (var i = startIndex + 6;i <= startIndex + 80; i++)
+            for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
                 NCB1.Add(origDMCFileContents[i]);
             }
 
             startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.3 ]==============================");
-            for (var i = startIndex + 6;i <= startIndex + 80; i++)
+            for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
                 NCB2.Add(origDMCFileContents[i]);
             }
 
             startIndex = origDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.1 ]=============================");
-            for (var i = startIndex + 6;i <= startIndex + 80; i++)
+            for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
                 PLC1.Add(origDMCFileContents[i]);
             }
@@ -177,95 +241,192 @@ namespace Diff_Tools
 
 
         }
+        private bool HasAPI()
+        {
+            if (!origFileContents.Contains("/(CDAD001)"))
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public bool IsLathe(string controlType)
+        {
+            if (controlType.EndsWith("M") || controlType.EndsWith("MA"))
+            {
+                return false;
+            }
+
+            if (origFileContents[origFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("MNC"))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsMachiningCenter(string controlType)
+        {
+            if (controlType.EndsWith("L") || controlType.EndsWith("LA"))
+            {
+                return false;
+            }
+
+            if (origFileContents[origFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("LNC"))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void FillClassVarCtrlType(int index)
+        {
+            OSPType = TrimControlType(origFileContents[index + 2]);
+        }
+
+        private void FillClassVarAPI(int index)
+        {
+            if (index != -1)
+            {
+                ApiVer = regex.Replace(origFileContents[index + 1], string.Empty);
+                ApiVer = ApiVer.Substring(ApiVer.IndexOf("V") + 1);
+                ApiVer = ApiVer.Replace("P", "");
+                ApiVer = (ApiVer.Contains("-") ? ApiVer.Substring(0, ApiVer.IndexOf("-")).Replace("P", "") : ApiVer.Replace("P", ""));
+            }
+            else
+            {
+                ApiVer = "NONE";
+            }
+        }
+
+        private void FillClassVarMchType(int index)
+        {
+            MachineType = TrimMachineType(regex.Replace(origFileContents[index + 2], string.Empty));
+        }
+
+        private void FillClassVarVSYS(int index)
+        {
+            Vsys = regex.Replace(origFileContents[index + 2], string.Empty);
+        }
+
+        private void FillClassVarSerialNo(int index)
+        {
+            SerialNumber = regex.Replace(origFileContents[index + 2], string.Empty);
+        }
+
+        private void FillClassVarNcVer(int index)
+        {
+            NcVer = regex.Replace(origFileContents[index + 2], string.Empty);
+            IsBSpecNC(NcVer);
+        }
+
+        private void FillClassVarPLCVer(int index)
+        {
+            PlcVer = regex.Replace(origFileContents[index + 2], string.Empty);
+            IsBSpecPLC(PlcVer);
+        }
+
+        private void FillClassVarWinVersion(int index)
+        {
+            WinVersion = regex.Replace(origFileContents[index + 1], string.Empty);
+        }
+
+        private void FillClassVarAPILibVer(int index)
+        {
+            ApiLibVer = regex.Replace(origFileContents[index + 2], string.Empty);
+        }
+
+        private void FillClassVarNC1Hex(int index)
+        {
+            NC1Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarNCB1Hex(int index)
+        {
+            NCB1Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarNCB2Hex(int index)
+        {
+            NCB2Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarPLC1Hex(int index)
+        {
+            PLC1Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarPLC2Hex(int index)
+        {
+            PLC2Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarPLC3Hex(int index)
+        {
+            PLC3Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
+        }
+
+        private void FillClassVarINST(int index)
+        {
+            INST = regex.Replace(origFileContents[index + 2], string.Empty);
+        }
+
+        private void FillClassVarVDRV(int index)
+        {
+            VDRV = regex.Replace(origFileContents[index + 2], string.Empty);
+        }
         public void fillClassVar()
         {
-            bool varExist = true;
-            int index;
-            //if (FileLocation != "" && FileLocation != null  && ListaFileExists)
-            //{
-                for (var i = 0;i < dmcLabel.Count() - 2; i++)
-                {
-                    if (origFileContents.Contains(dmcLabel[i]) && varExist != false)
+            //bool varExist = true;
+            //    for (var i = 0;i < dmcLabel.Count() - 2; i++)
+            //    {
+            //        if (origFileContents.Contains(dmcLabel[i]) && varExist != false)
+            //        {
+            //            varExist = true;
+            //        }
+            //        else
+            //        {
+            //            varExist = false;
+            //        }
+            //    }
+            //    if (varExist == true)
+            //    {
+                    FillClassVarCtrlType(origFileContents.IndexOf(dmcLabel[0]));
+                    if (IsLathe(OSPType))
                     {
-                        varExist = true;
+                        dmcLabel.Remove("/(PCGN)");
+                        dmcLabel.Insert(6, "/(PCGM)");
+                        isLathe = true;
                     }
-                    else
+                    else if (IsMachiningCenter(OSPType))
                     {
-                        varExist = false;
-                    }
-                }
-                
-                if (varExist == true)
-                {
-                    index = origFileContents.IndexOf(dmcLabel[0]);
-                    OSPType = origFileContents[index + 2];
-                    OSPType = OSPType.Replace("OSP-", "");
-                    if (OSPType.EndsWith("-R"))
-                    {
-                        OSPType = OSPType.Replace("-R", "");
-                    }
-                    if (OSPType.EndsWith("L")  || OSPType.EndsWith("LA") || OSPType.EndsWith("S") || OSPType.EndsWith("SA"))
-                    {
-                        if (origFileContents[origFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("LNC"))
-                        {
-                            dmcLabel.Remove("/(PCGN)");
-                            dmcLabel.Insert(6, "/(PCGM)");
-                        dmcLabel.Add("/(NCB2)");
-                        dmcLabel.Add("/(PLC3)");
-                            isLathe = true;
-                        }
-                    }
-                    else if (OSPType.EndsWith("M") || OSPType.EndsWith("MA") || OSPType.EndsWith("S") || OSPType.EndsWith("SA"))
-                    {
-                        if (origFileContents[origFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("MNC")) {
                             dmcLabel.Remove("/(PCGM)");
-                            //dmcLabel.Remove("/(PLC3)");
                             fillClassVarMC();
-                            isLathe = false;
-                        }
+                            isLathe = false;   
                     }
-                    if (origFileContents.Contains("/(CDAD001)"))
-                    {
-                        index = origFileContents.IndexOf("/(CDAD001)");
-                        ApiVer = regex.Replace(origFileContents[index + 1], string.Empty);
-                        ApiVer = ApiVer.Substring(ApiVer.IndexOf("V") + 1);
-                        ApiVer = ApiVer.Replace("P", "");
-                        ApiVer = (ApiVer.Contains("-") ? ApiVer.Substring(0, ApiVer.IndexOf("-")).Replace("P", "") : ApiVer.Replace("P", ""));
-                    }
-                    else
-                    {
-                        ApiVer = "NONE";
-                    }
-                    index = origFileContents.IndexOf(dmcLabel[1]);
-                    MachineType = regex.Replace(origFileContents[index + 2], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[2]);
-                    SerialNumber = regex.Replace(origFileContents[index + 2], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[3]);
-                    NcVer = regex.Replace(origFileContents[index + 2], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[4]);
-                    PlcVer = regex.Replace(origFileContents[index + 2], string.Empty);                                       
-                    index = origFileContents.IndexOf(dmcLabel[5]);
-                    WinVersion = regex.Replace(origFileContents[index + 1], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[6]);
-                    ApiLibVer = regex.Replace(origFileContents[index + 2],string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[7]);
-                    NC1Hex = regex.Replace(origFileContents[index + 3] +"-"+ origFileContents[index + 5], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[8]);
-                    NCB1Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[9]);
-                    PLC1Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[10]);
-                    PLC2Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
                     
-                if(isLathe == true)
-                {
-                    index = origFileContents.IndexOf(dmcLabel[11]);
-                    NCB2Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
-                    index = origFileContents.IndexOf(dmcLabel[12]);
-                    PLC3Hex = regex.Replace(origFileContents[index + 3] + "-" + origFileContents[index + 5], string.Empty);
-                }
-                }
-                
+                    FillClassVarAPI(origFileContents.IndexOf("/(CDAD001)"));
+                    FillClassVarMchType(origFileContents.IndexOf(dmcLabel[1]));              
+                    FillClassVarSerialNo(origFileContents.IndexOf(dmcLabel[2]));                  
+                    FillClassVarNcVer(origFileContents.IndexOf(dmcLabel[3]));
+                    FillClassVarPLCVer(origFileContents.IndexOf(dmcLabel[4]));
+                    FillClassVarWinVersion(origFileContents.IndexOf(dmcLabel[5]));
+                    FillClassVarAPILibVer(origFileContents.IndexOf(dmcLabel[6]));
+                    FillClassVarNC1Hex(origFileContents.IndexOf(dmcLabel[7]));
+                    FillClassVarNCB1Hex(origFileContents.IndexOf(dmcLabel[8]));
+                    FillClassVarPLC1Hex(origFileContents.IndexOf(dmcLabel[9]));
+                    FillClassVarPLC2Hex(origFileContents.IndexOf(dmcLabel[10]));
+                    FillClassVarVSYS(origFileContents.IndexOf(dmcLabel[11]));
+            if (origFileContents.Contains("/(NCB2)"))
+            {
+                dmcLabel.Add("/(NCB2)");
+                FillClassVarNCB2Hex(origFileContents.IndexOf(dmcLabel[12]));
+            }
+            if (origFileContents.Contains("/(PLC3)")) 
+            {
+                dmcLabel.Add("/(PLC3)");
+                FillClassVarPLC3Hex(origFileContents.IndexOf(dmcLabel[13]));
+            }
             //}
         }
         public void fillClassVarMC()
@@ -322,6 +483,36 @@ namespace Diff_Tools
         public string NCB1Hex
         { get; set; }
 
+        public string INST 
+        { get; set; }
+        public string VDRV 
+        { get; set; }
+        public string PLCS
+        { get; set; }
+        public string OneTouchIGF
+        { get; set; }
+        public string OneTouchIGFMessage
+        { get; set; }
+        public string NCAlarmHelp
+        { get; set; }
+        public string NCManual
+        { get; set; }
+        public string SVFKA
+        { get; set; }
+        public string VerticalFunctionKeyMessage
+        { get; set; }
+        public string CAS
+        { get; set; }
+        public string EasyModelling
+        { get; set; }
+        public string SFTY
+        { get; set; }
+        public string OSPSuite
+        { get; set; }
+        public string OSPSuiteUtility
+        { get; set; }
+        public string CycleTimeReduction
+        { get; set; }
         public string PLTUA  //ATC Logic File
         { get; set; }
 
@@ -356,20 +547,39 @@ namespace Diff_Tools
 
         public string ApiLibVer
         { get; set; }
+        public string Vsys
+        {
+            get;set;
+        }
 
-        public string getOrigFileContents(int index)
+        public string GetOrigFileContents(int index)
         {
             return origFileContents[index];
         }
 
-        public List<string> getOrigFileContents()
+        public List<string> GetOrigFileContents()
         {
             return origFileContents;
         }
 
-        public void addOrigFileContents(string value)
+        public void AddOrigFileContents(string value)
         {
             origFileContents.Add(value);
+        }
+
+        public string TrimControlType(string controlType)
+        {
+            for(var i = 0; i < controlTypePattern.Length; i++)
+            {
+                controlTypeReg = new Regex(controlTypePattern[i], RegexOptions.IgnoreCase);
+                if (controlTypeReg.IsMatch(controlType))
+                {
+                    string outputCT = Regex.Replace(controlType, controlTypePattern[i], "");
+                    
+                    return outputCT.Replace("OSP-", "");
+                }
+            }
+            return controlType.Replace("OSP-", "");
         }
 
      

@@ -86,7 +86,7 @@ namespace Diff_Tools
             // 
             // Label6
             // 
-            this.Label6.BackColor = System.Drawing.Color.DodgerBlue;
+            this.Label6.BackColor = System.Drawing.Color.CornflowerBlue;
             this.Label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Label6.Location = new System.Drawing.Point(6, 99);
             this.Label6.Name = "Label6";
@@ -105,7 +105,7 @@ namespace Diff_Tools
             // 
             // Label4
             // 
-            this.Label4.BackColor = System.Drawing.Color.Chocolate;
+            this.Label4.BackColor = System.Drawing.Color.LightSalmon;
             this.Label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Label4.Location = new System.Drawing.Point(6, 71);
             this.Label4.Name = "Label4";
@@ -124,7 +124,7 @@ namespace Diff_Tools
             // 
             // Label2
             // 
-            this.Label2.BackColor = System.Drawing.Color.Orange;
+            this.Label2.BackColor = System.Drawing.Color.DarkKhaki;
             this.Label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Label2.Location = new System.Drawing.Point(6, 43);
             this.Label2.Name = "Label2";
@@ -143,7 +143,7 @@ namespace Diff_Tools
             // 
             // rollbackLbl
             // 
-            this.rollbackLbl.BackColor = System.Drawing.Color.Red;
+            this.rollbackLbl.BackColor = System.Drawing.Color.Firebrick;
             this.rollbackLbl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.rollbackLbl.Location = new System.Drawing.Point(6, 16);
             this.rollbackLbl.Name = "rollbackLbl";
@@ -168,7 +168,7 @@ namespace Diff_Tools
             // 
             // displayRTB
             // 
-            this.displayRTB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.displayRTB.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayRTB.Location = new System.Drawing.Point(12, 39);
             this.displayRTB.Name = "displayRTB";
             this.displayRTB.ReadOnly = true;
@@ -331,6 +331,7 @@ namespace Diff_Tools
             this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "mainForm";
             this.Text = "Diff ATLAS";
             this.Load += new System.EventHandler(this.MainForm_Load);
