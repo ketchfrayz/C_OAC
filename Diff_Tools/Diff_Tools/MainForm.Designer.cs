@@ -186,7 +186,7 @@ namespace Diff_Tools
             this.apiLB.Location = new System.Drawing.Point(536, 436);
             this.apiLB.Name = "apiLB";
             this.apiLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.apiLB.Size = new System.Drawing.Size(300, 82);
+            this.apiLB.Size = new System.Drawing.Size(333, 82);
             this.apiLB.TabIndex = 21;
             // 
             // rollBackLV
@@ -198,7 +198,7 @@ namespace Diff_Tools
             this.rollBackLV.Location = new System.Drawing.Point(536, 39);
             this.rollBackLV.MultiSelect = false;
             this.rollBackLV.Name = "rollBackLV";
-            this.rollBackLV.Size = new System.Drawing.Size(300, 95);
+            this.rollBackLV.Size = new System.Drawing.Size(333, 95);
             this.rollBackLV.TabIndex = 22;
             this.rollBackLV.UseCompatibleStateImageBehavior = false;
             this.rollBackLV.View = System.Windows.Forms.View.Details;
@@ -213,7 +213,7 @@ namespace Diff_Tools
             this.addFileLV.Location = new System.Drawing.Point(536, 138);
             this.addFileLV.MultiSelect = false;
             this.addFileLV.Name = "addFileLV";
-            this.addFileLV.Size = new System.Drawing.Size(300, 95);
+            this.addFileLV.Size = new System.Drawing.Size(333, 95);
             this.addFileLV.TabIndex = 23;
             this.addFileLV.UseCompatibleStateImageBehavior = false;
             this.addFileLV.View = System.Windows.Forms.View.Details;
@@ -228,7 +228,7 @@ namespace Diff_Tools
             this.servoLV.Location = new System.Drawing.Point(536, 237);
             this.servoLV.MultiSelect = false;
             this.servoLV.Name = "servoLV";
-            this.servoLV.Size = new System.Drawing.Size(300, 95);
+            this.servoLV.Size = new System.Drawing.Size(333, 95);
             this.servoLV.TabIndex = 24;
             this.servoLV.UseCompatibleStateImageBehavior = false;
             this.servoLV.View = System.Windows.Forms.View.Details;
@@ -243,7 +243,7 @@ namespace Diff_Tools
             this.piodLV.Location = new System.Drawing.Point(536, 337);
             this.piodLV.MultiSelect = false;
             this.piodLV.Name = "piodLV";
-            this.piodLV.Size = new System.Drawing.Size(300, 95);
+            this.piodLV.Size = new System.Drawing.Size(333, 95);
             this.piodLV.TabIndex = 25;
             this.piodLV.UseCompatibleStateImageBehavior = false;
             this.piodLV.View = System.Windows.Forms.View.Details;
@@ -258,7 +258,7 @@ namespace Diff_Tools
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(863, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(886, 24);
             this.menuStrip1.TabIndex = 27;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -309,7 +309,7 @@ namespace Diff_Tools
             this.rulesLB.Location = new System.Drawing.Point(536, 522);
             this.rulesLB.Name = "rulesLB";
             this.rulesLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.rulesLB.Size = new System.Drawing.Size(300, 82);
+            this.rulesLB.Size = new System.Drawing.Size(333, 82);
             this.rulesLB.TabIndex = 28;
             // 
             // mainForm
@@ -317,7 +317,7 @@ namespace Diff_Tools
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(863, 685);
+            this.ClientSize = new System.Drawing.Size(886, 685);
             this.Controls.Add(this.rulesLB);
             this.Controls.Add(this.piodLV);
             this.Controls.Add(this.servoLV);
@@ -333,7 +333,7 @@ namespace Diff_Tools
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "Diff ATLAS";
+            this.Text = "DAU ATLAS - 1.0.1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);

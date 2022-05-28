@@ -36,8 +36,8 @@ namespace Diff_Tools
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             string fullText;
             rulesDT = new DataTable("Rules");
             if (File.Exists(filePath))
@@ -77,8 +77,8 @@ namespace Diff_Tools
         private void PopAPIDT()
         {
             apiDS = new DataSet();
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
             string fullText;
             apiDT = new DataTable("APIVersion");
             if (File.Exists(filePath)) 
@@ -348,10 +348,6 @@ namespace Diff_Tools
                 }
             }
         }
-        private void addNewRule_Click(object sender, EventArgs e)
-        {
-
-        }
         private void Timer1_Tick(object sender, EventArgs e)
         {
             if (numTicks < 10)
@@ -449,7 +445,7 @@ namespace Diff_Tools
                 {
                     diff.FileLocation = files[0];
                     dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
-                    ReadDiffFile(diff.FileLocation, dmc.FileLocation + "\\LISTA.DAT", dmc.FileLocation + "\\OSPMNGCD.CNC");
+                    ReadFileData();
                     diff.SetTrimFileContents(TrimBeginEnd(diff.GetOrigFileContents()));
                     diff.SetHexIndex(GetHexIndex(diff.GetTrimFileContents()));
                     ProcessDiff();
@@ -732,7 +728,59 @@ namespace Diff_Tools
             contentsList.RemoveAll( string.IsNullOrWhiteSpace);
             return contentsList;
         }
-        public void ReadDiffFile(string diffFileLocation, string listaFileLocation, string DMCFileLocation)
+
+        public void ReadFileData()
+        {
+            ReadDiffFile(diff.FileLocation);
+            ReadLISTAFile(dmc.FileLocation + "\\LISTA.DAT");
+            ReadDMCFile(dmc.FileLocation + "\\OSPMNGCD.CNC");
+            if(diff.SerialNumber != dmc.SerialNumber)
+            {
+                MessageBox.Show("DIFF and LISTA serial numbers don't match!  Please correct and try again.");
+            }
+        }
+        public void ReadDMCFile(string DMCFileLocation)
+        {
+            if (File.Exists(DMCFileLocation))
+            {
+                using (var sr = new StreamReader(DMCFileLocation))
+                {
+                    do
+                    {
+                        dmc.AddOrigDMCFileContents(sr.ReadLine());
+                    } while (sr.Peek() != -1);
+                }
+                dmc.DMCFileExists = true;
+                dmc.FillSpecCodeList();
+
+            }
+            else
+            {
+                dmc.DMCFileExists = false;
+            }
+        }
+
+        public void ReadLISTAFile(string listaFileLocation)
+        {
+            if (File.Exists(listaFileLocation))
+            {
+                using (var sr = new StreamReader(listaFileLocation))
+                {
+                    do
+                    {
+                        dmc.AddOrigLISTAFileContents(sr.ReadLine());
+                    } while (sr.Peek() != -1);
+                }
+                dmc.ListaFileExists = true;
+                dmc.fillClassVar();
+            }
+            else
+            {
+                dmc.ListaFileExists = false;
+                MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(listaFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
+            }
+        }
+        public void ReadDiffFile(string diffFileLocation)
         {
             using (var sr = new StreamReader(diffFileLocation))
             {
@@ -746,44 +794,44 @@ namespace Diff_Tools
             {
                 displayRTB.Text += diff.GetOrigFileContents(i) + System.Environment.NewLine;
             }
-            if (File.Exists(listaFileLocation))
-            {
-                using (var sr = new StreamReader(listaFileLocation))
-                {
-                    do
-                    {
-                        dmc.AddOrigFileContents(sr.ReadLine());
-                    } while (sr.Peek() != -1);
-                }
-                dmc.ListaFileExists = true;
-                dmc.fillClassVar();
-                if (diff.SerialNumber != dmc.SerialNumber)
-                {
-                    MessageBox.Show("Diff and Lista serial number do not match.  Put correct LISTA in machine folder.");
-                }
-            }
-            else
-            {
-                dmc.ListaFileExists = false;
-                MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(listaFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
-            }
-            if (File.Exists(DMCFileLocation))
-            {
-                using (var sr = new StreamReader(DMCFileLocation))
-                {
-                    do
-                    {
-                        dmc.addOrigDMCFileContents(sr.ReadLine());
-                    } while (sr.Peek() != -1);
-                }
-                dmc.DMCFileExists = true;
-                dmc.FillSpecCodeList();
+            //if (File.Exists(listaFileLocation))
+            //{
+            //    using (var sr = new StreamReader(listaFileLocation))
+            //    {
+            //        do
+            //        {
+            //            dmc.AddOrigLISTAFileContents(sr.ReadLine());
+            //        } while (sr.Peek() != -1);
+            //    }
+            //    dmc.ListaFileExists = true;
+            //    dmc.fillClassVar();
+            //    if (diff.SerialNumber != dmc.SerialNumber)
+            //    {
+            //        MessageBox.Show("Diff and Lista serial number do not match.  Put correct LISTA in machine folder.");
+            //    }
+            //}
+            //else
+            //{
+            //    dmc.ListaFileExists = false;
+            //    MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(listaFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
+            //}
+            //if (File.Exists(DMCFileLocation))
+            //{
+            //    using (var sr = new StreamReader(DMCFileLocation))
+            //    {
+            //        do
+            //        {
+            //            dmc.AddOrigDMCFileContents(sr.ReadLine());
+            //        } while (sr.Peek() != -1);
+            //    }
+            //    dmc.DMCFileExists = true;
+            //    dmc.FillSpecCodeList();
 
-            }
-            else
-            {
-                dmc.DMCFileExists = false;
-            }
+            //}
+            //else
+            //{
+            //    dmc.DMCFileExists = false;
+            //}
         }
         public List<string> GetHexIndex(List<string> fileList)
         {
@@ -1140,20 +1188,20 @@ namespace Diff_Tools
 
 
 
-        public string GetSpecCodeLabel(string specLine, int colNum)
-        {
-            string specCode;
-            if (colNum == 0)
-            {
-                specCode = specLine.Substring(0, 18);
-                return specCode;
-            }
-            else
-            {
-                specCode = specLine.Substring(colNum * 20, 18);
-                return specCode;
-            }
-        }
+        //public string GetSpecCodeLabel(string specLine, int colNum)
+        //{
+        //    string specCode;
+        //    if (colNum == 0)
+        //    {
+        //        specCode = specLine.Substring(0, 18);
+        //        return specCode;
+        //    }
+        //    else
+        //    {
+        //        specCode = specLine.Substring(colNum * 20, 18);
+        //        return specCode;
+        //    }
+        //}
         public bool HasSpecCode(string specType, int specNum, int specBit)
         {
             
@@ -1163,27 +1211,27 @@ namespace Diff_Tools
             {
                 case "NC1":
                     specCode = dmc.NC1Hex.Split('-');
-                    specList = dmc.getNC1();
+                    specList = dmc.GetNC1();
                     break;
                 case "NCB1":
                     specCode = dmc.NCB1Hex.Split('-');
-                    specList = dmc.getNCB1();
+                    specList = dmc.GetNCB1();
                     break;
                 case "NCB2":
                     specCode = dmc.NCB2Hex.Split('-');
-                    specList = dmc.getNCB2();
+                    specList = dmc.GetNCB2();
                     break;
                 case "PLC1":
                     specCode = dmc.PLC1Hex.Split('-');
-                    specList = dmc.getPLC1();
+                    specList = dmc.GetPLC1();
                     break;
                 case "PLC2":
                     specCode = dmc.PLC2Hex.Split('-');
-                    specList = dmc.getPLC2();
+                    specList = dmc.GetPLC2();
                     break;
                 case "PLC3":
                     specCode = dmc.PLC3Hex.Split('-');
-                    specList = dmc.getPLC3();
+                    specList = dmc.GetPLC3();
                     break;
             }
             int index = (specNum - 1) / 2;
@@ -1221,52 +1269,17 @@ namespace Diff_Tools
             }
             Int32.TryParse(dmc.GetSpecSepIndex(indexRemainder),out int sepIndex);
             sepIndex += 1;
-            MessageBox.Show(specList[sepIndex + specBit] + " " + bitVal);
             if (bitVal == 1)
             {
-                //List<string> sepIndex = new List<string>();
                 return true;
             } else
             {
                 return false;
             }
-
-            
-
-            //List<string> sepIndex = new List<string>();
-
-            //string[] sepSpecCode = specCode.Split('-');
-
         }
     
-        public bool CheckMachineTypeMatchesRule(string machineTypeRule, string DMCmachineType)
-        {
-            string[] results = machineTypeRule.Split('|');
-           if ( results.Count() == 1 && machineTypeRule != DMCmachineType && machineTypeRule != "ANY")
-            {
-                MessageBox.Show("Results count = 1, machineTypeRule!=DMCmachineType, machineTypeRule!=ANY");
-                return false;
-            } 
-        else if ( results.Count() > 1)
-            {
-                for (var i = 0; i < results.Count(); i++)
-                {
-                    if (results[i] == DMCmachineType)
-                    {
-
-                        MessageBox.Show("results count > 1, Condition is true");
-                    return true;
-                    }
-                }
-                MessageBox.Show("results count > 1, No Match!");
-            return false;
-            }
-            MessageBox.Show("There is a match");
-            return true;
-        }
         public bool CheckOptionalRule(string machineTypeRule)
         {
-
             string[] splitRule = machineTypeRule.Split('|');
             for (var i = 0; i < splitRule.Count(); i++)
             {
@@ -1311,7 +1324,6 @@ namespace Diff_Tools
                         break;
 
                     case "[SPEC CODE]":
-                        //string[] splitSpecCode = splitRule[i].Split('|');
                         if (!CompSpecCodeCriteria(splitRule[i].Substring(categoryEndIndex + 1)))
                         {
                             return false;
@@ -1334,7 +1346,7 @@ namespace Diff_Tools
                 }
             }
             return true;
-        } //NOT FINISHED / NEED TO TEST
+        } 
         
 
         //Rule checker criteria 3 subfunctions
@@ -1453,12 +1465,12 @@ namespace Diff_Tools
             string[] seperatedRule = ruleSpecCode.Split(':');
             int no = Int32.Parse(seperatedRule[1]);
             int bit = Int32.Parse(seperatedRule[2]);
-            if (seperatedRule[3] == "0" && HasSpecCode(seperatedRule[0], no, bit))
+            if (seperatedRule[3] == "OFF" && HasSpecCode(seperatedRule[0], no, bit))
             {
                 return false;
             }
 
-            if (seperatedRule[3] == "1" && !HasSpecCode(seperatedRule[0], no, bit))
+            if (seperatedRule[3] == "ON" && !HasSpecCode(seperatedRule[0], no, bit))
             {
                 return false;
             }

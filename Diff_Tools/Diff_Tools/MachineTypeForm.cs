@@ -22,8 +22,6 @@ namespace Diff_Tools
             InitializeComponent();
         }
 
-
-        
         private void ReadMachineXML()
         {
             machineDataSet.ReadXml("\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\MachineList_THINC.xml");
@@ -31,21 +29,16 @@ namespace Diff_Tools
             machineDataTable = machineDataSet.Tables[0];
         }
 
-        private void exitBtn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         public void PopMachineList(string code)
         {
+            machineTypeLB.Items.Clear();
             DataRow[] foundRows;
             foundRows = machineDataSet.Tables[0].Select("type = '" + code + "'");
             machineTypeLB.Items.Add("ANY");
             for (var i = 0; i < foundRows.Count(); i++)
             {
                 machineTypeLB.Items.Add(foundRows[i][0]);
-            }
-          
+            } 
         }
 
         public bool IsFrmComplete()
@@ -57,8 +50,6 @@ namespace Diff_Tools
             }
             return true;
         }
-
-      
 
         public string ReturnFrmSelection()
         {
@@ -124,7 +115,4 @@ namespace Diff_Tools
             PopMachineList(WizardFrmParent.rule.Peek().Substring(4, 1));
         }
     }
-   
 }
-
-
