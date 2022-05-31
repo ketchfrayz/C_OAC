@@ -133,6 +133,7 @@ namespace Diff_Tools
                         else if (libCompResult > 0)
                         {
                             apiLB.Items.Add(iDmc.ApiVer + " Library required: " + "MCAPI-003S" + " | " + iDmc.SerialNumber + " Library : " + iDmc.ApiLibVer);
+                            apiLB.Items.Add("==========");
                             return false;
                         }
 
@@ -149,6 +150,7 @@ namespace Diff_Tools
                         else if (libCompResult > 0)
                         {
                             apiLB.Items.Add(iDmc.ApiVer + " Library required: " + "MCAPI-003S" + " | " + iDmc.SerialNumber + " Library : " + iDmc.ApiLibVer);
+                            apiLB.Items.Add("==========");
                         }
                         return false;
                     }
@@ -184,6 +186,7 @@ namespace Diff_Tools
                             else if (libCompResult > 0)
                             {
                                 apiLB.Items.Add(iDmc.ApiVer + " Library required: " + reqLib + " | " + iDmc.SerialNumber + " Library : " + iDmc.ApiLibVer);
+                                apiLB.Items.Add("==========");
                                 return false;
                             }
 
@@ -192,6 +195,7 @@ namespace Diff_Tools
                         else if (ncCompResult > 0)
                         {
                             apiLB.Items.Add(iDmc.ApiVer + " NC required: " + reqNC + " | " + iDmc.SerialNumber + " NC : " + iDmc.NcVer);
+                            apiLB.Items.Add("==========");
                             //DMC API library higher than required API library version
                             if (libCompResult < 0)
                             {
@@ -201,6 +205,7 @@ namespace Diff_Tools
                             else if (libCompResult > 0)
                             {
                                 apiLB.Items.Add(iDmc.ApiVer + " Library required: " + reqLib + " | " + iDmc.SerialNumber + " Library : " + iDmc.ApiLibVer);
+                                apiLB.Items.Add("==========");
                             }
                             return false;
                         }
@@ -451,6 +456,7 @@ namespace Diff_Tools
                     ProcessDiff();
                     CheckAgainstRulesDB();
                     ChangeFlagColor();
+                    outputToLog(CreateOutputRecord());
                 }
                 else
                 {
@@ -648,9 +654,10 @@ namespace Diff_Tools
                             }
                             for (var i = mpIndex + fsIntDiv; i < diff.GetFileSection().Count(); i++)
                             {
-                                if (!(diff.GetFileSection(i).Contains("SAFETY")))
+                                if (!(diff.GetFileSection(i).Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *")))
                                 {
                                     addFileLV.Items.Add(diff.GetFileSection(i));
+                                    addFileLV.Items.Add("==========");
                                     HighlightFlags(diff.GetFileSection(i), 'a');
                                     CheckSpecCond(diff.GetFileSection(i));
                                 }
@@ -662,6 +669,7 @@ namespace Diff_Tools
                                 if (diff.GetFileSection(i) != "---")
                                 {
                                     addFileLV.Items.Add(diff.GetFileSection(i));
+                                    addFileLV.Items.Add("==========");
                                     HighlightFlags(diff.GetFileSection(i), 'a');
                                     CheckSpecCond(diff.GetFileSection(i));
                                 }
@@ -676,11 +684,12 @@ namespace Diff_Tools
                 {
                     for (var i = 0; i <= diff.GetFileSection().Count() - 1; i++)
                     {
-                        if (!(diff.GetFileSection().Contains("SAFETY")))
+                        if (!(diff.GetFileSection().Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *             ")))
                         {
-                            if (diff.GetFileSection(i) != "> *")
+                            if (!diff.GetFileSection(i).StartsWith("> *"))
                             {
                                 addFileLV.Items.Add(diff.GetFileSection(i));
+                                addFileLV.Items.Add("==========");
                                 HighlightFlags(diff.GetFileSection(i), 'a');
                                 CheckSpecCond(diff.GetFileSection(i));
                             }
@@ -1099,8 +1108,10 @@ namespace Diff_Tools
                 piodLV.Items.Add(prevFile);
                 piodLV.Items.Add("---");
                 piodLV.Items.Add(newFile);
+                piodLV.Items.Add("==========");
                 diff.AddIOFiles(prevFile);
                 diff.AddIOFiles(newFile);
+                
                 if ((rollBackLV.FindItemWithText(prevFile) == null) && (rollBackLV.FindItemWithText(newFile) == null))
                 {
                     HighlightFlags(prevFile, newFile, 'p');
@@ -1112,6 +1123,7 @@ namespace Diff_Tools
             if (file.Contains("PIOD") || file.Contains("SIOD"))
             {
                 piodLV.Items.Add(file);
+                piodLV.Items.Add("==========");
                 diff.AddIOFiles(file);
                 if ((addFileLV.FindItemWithText(file) == null))
                 {
@@ -1531,6 +1543,158 @@ namespace Diff_Tools
             ExistingForm exform = new ExistingForm(rulesDS);
             exform.ShowDialog();
         }
+    
+        public void outputToLog(string outputRecord)
+        {
+            //string outputRecord
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            if (!File.Exists(filePath))
+            {
+                using (var sw = File.CreateText(filePath))
+                {
+                    sw.WriteLine("date/time,controlType,machineType,serialNumber,rollback,added,sdf,piod,api,custRule");
+                }
+            }
+            using (var sw = File.AppendText(filePath))
+            {
+                sw.WriteLine(outputRecord);
+            }
+        }
+
+        public string CreateOutputRecord()
+        {
+            string outputRecord = DateTime.Now.ToString() + "," + dmc.OSPType + "," + dmc.MachineType + "," + dmc.SerialNumber + ",";
+            outputRecord += AddRollBackRecord() + ",";
+            outputRecord += AddAddedRecord() + ",";
+            outputRecord += AddSDFRecord() + ",";
+            outputRecord += AddPIODRecord() + ",";
+            outputRecord += AddAPIRecord() + ",";
+            outputRecord += AddCustRuleRecord();
+            return outputRecord;
+        }
+
+        public string AddRollBackRecord()
+        {
+            string rollBackRecord = "";
+            if (rollBackLV.Items.Count > 0)
+            {
+                for (var i = 0; i < rollBackLV.Items.Count - 1; i++)
+                {
+                    if (rollBackLV.Items[i].Text == "==========")
+                    {
+                        rollBackRecord += "|";
+                    }
+                    rollBackRecord += rollBackLV.Items[i].Text;
+
+                }
+            }
+            return rollBackRecord;
+        }
+        
+        public string AddAddedRecord ()
+        {
+            string addedRecord = "";
+            if (addFileLV.Items.Count > 1)
+            {
+                for (var i = 0; i < addFileLV.Items.Count; i++)
+                {
+                    if (addFileLV.Items[i].Text == "==========") 
+                    {
+                        addedRecord += "|";
+                    }
+                    else
+                    {
+                        addedRecord += addFileLV.Items[i].Text;
+                    }
+                    
+                }
+            }
+            return addedRecord;
+        }
+
+        public string AddSDFRecord()
+        {
+            string sdfRecord = "";
+            if (servoLV.Items.Count > 0)
+            {
+                for (var i = 0; i < servoLV.Items.Count; i++)
+                {
+                    if (servoLV.Items[i].Text == "==========")
+                    {
+                        sdfRecord += "|";
+                    }
+                    else
+                    {
+                        sdfRecord += servoLV.Items[i].Text;
+                    }
+                }
+            }
+            return sdfRecord;
+        }
+
+        public string AddPIODRecord()
+        {
+            string piodRecord = "";
+            if (piodLV.Items.Count > 0)
+            {
+                for (var i = 0; i < piodLV.Items.Count - 1; i++)
+                {
+                    if(piodLV.Items[i].Text == "==========")
+                    {
+                        piodRecord += "|";
+                    }
+                    else
+                    {
+                        piodRecord += piodLV.Items[i].Text;
+                    }
+                }
+            }
+            return piodRecord;
+        }
+
+        public string AddAPIRecord()
+        {
+            string apiRecord = "";
+            if (apiLB.Items.Count > 0)
+            {
+                for (var i = 0; i < apiLB.Items.Count - 1; i++)
+                {
+                    if (apiLB.Items[i].ToString() == "==========")
+                    {
+                        apiRecord += "|";
+                    }
+                    else
+                    {
+                        apiRecord += apiLB.Items[i].ToString();
+                    }
+                }
+
+            }
+            return apiRecord;
+        }
+
+        public string AddCustRuleRecord()
+        {
+            string customRecord = "";
+            if (rulesLB.Items.Count > 0)
+            {
+                for (var i = 0; i < rulesLB.Items.Count - 1; i++)
+                {
+                    if (rulesLB.Items[i].ToString() == "==========")
+                    {
+                        customRecord += "|";
+                    }
+                    else
+                    {
+                        customRecord += rulesLB.Items[i].ToString();
+                    }
+                }
+            }
+            return customRecord;
+        }
+
+
     }
 
 }

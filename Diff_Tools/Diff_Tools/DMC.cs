@@ -401,7 +401,7 @@ namespace Diff_Tools
             if (origLISTAFileContents.Contains("/(PLC3)")) 
             {
                 dmcLabel.Add("/(PLC3)");
-                FillClassVarPLC3Hex(origLISTAFileContents.IndexOf(dmcLabel[13]));
+                FillClassVarPLC3Hex(origLISTAFileContents.IndexOf(dmcLabel[dmcLabel.Count - 1]));
             }
             
         }
