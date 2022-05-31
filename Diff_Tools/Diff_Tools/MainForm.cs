@@ -1548,7 +1548,7 @@ namespace Diff_Tools
         {
             //string outputRecord
             //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
             if (!File.Exists(filePath))
             {
                 using (var sw = File.CreateText(filePath))
