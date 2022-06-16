@@ -32,7 +32,6 @@ namespace Diff_Tools
         {
             InitializeComponent();
         }
-
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
@@ -221,7 +220,18 @@ namespace Diff_Tools
             }
             return false;
         }
+        private void MoveEXE()
+        {
 
+        }
+        private void CheckUpdate()
+        {           
+            if (!File.Exists("\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\update\\DAU-ATLAS(alpha).EXE"))
+            {
+                return;
+            }
+           
+        }
         private bool CheckMachineType(string dmcMachineType, string ruleMachineType)
         {
             if (ruleMachineType.Contains("|"))
@@ -260,6 +270,7 @@ namespace Diff_Tools
                 if(CheckMachineType(dmc.MachineType, ruleDataRow[i][1].ToString()) && CheckOptionalRule(ruleDataRow[i][2].ToString()))
                 {
                     rulesLB.Items.Add(ruleDataRow[i][3]);
+                    rulesLB.Items.Add("==========");
                 }
 
             }
@@ -470,7 +481,7 @@ namespace Diff_Tools
                 return;
             }
         }
-        public void CompareFiles(string prevFile, string newFile, List<string> origContents)
+        public void CompareFiles(string prevFile, string newFile)
         {
             if (!(prevFile.StartsWith("< * cspsVer") && newFile.StartsWith("> * cspsVer")))
             {
@@ -492,8 +503,9 @@ namespace Diff_Tools
                 else if (result > 0)
                 {
                     rollBackLV.Items.Add(prevFile);
-                    rollBackLV.Items.Add("- - -");
+                    rollBackLV.Items.Add("---");
                     rollBackLV.Items.Add(newFile);
+                    rollBackLV.Items.Add("==========");
                     HighlightFlags(prevFile, newFile, 'r');
                 }
                 CheckSpecCond(prevFile, newFile);
@@ -643,14 +655,14 @@ namespace Diff_Tools
                     {
                         for (var i = 0; i < diff.GetFileSection().IndexOf("---"); i++)
                         {
-                            CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)), diff.GetOrigFileContents());
+                            CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)));
                         }
                     } else if(fsIntDiv != mpIndex || fsModDiv == 0)
                     {
                         if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){
                             for (var i = 0; i < mpIndex; i++)
                             {
-                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)), diff.GetOrigFileContents());
+                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)));
                             }
                             for (var i = mpIndex + fsIntDiv; i < diff.GetFileSection().Count(); i++)
                             {
@@ -676,7 +688,7 @@ namespace Diff_Tools
                             }
                             for (var i = 0; i < startAdd; i++)
                             {
-                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + mpIndex), diff.GetOrigFileContents());
+                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + mpIndex));
                             }
                         }
                     }
@@ -1394,6 +1406,12 @@ namespace Diff_Tools
                         return false;
                     }
                     break;
+                case "≠":
+                    if (result == 0)
+                    {
+                        return false;
+                    }
+                    break;
             }
             return true;
         }
@@ -1553,7 +1571,7 @@ namespace Diff_Tools
             {
                 using (var sw = File.CreateText(filePath))
                 {
-                    sw.WriteLine("date/time,controlType,machineType,serialNumber,rollback,added,sdf,piod,api,custRule");
+                    sw.WriteLine("date/time,userName,PC,controlType,machineType,serialNumber,rollback,added,sdf,piod,api,custRule");
                 }
             }
             using (var sw = File.AppendText(filePath))
@@ -1564,7 +1582,7 @@ namespace Diff_Tools
 
         public string CreateOutputRecord()
         {
-            string outputRecord = DateTime.Now.ToString() + "," + dmc.OSPType + "," + dmc.MachineType + "," + dmc.SerialNumber + ",";
+            string outputRecord = DateTime.Now.ToString() + "," + Environment.UserName + "," + Environment.MachineName + ","+ dmc.OSPType + "," + dmc.MachineType + "," + dmc.SerialNumber + ",";
             outputRecord += AddRollBackRecord() + ",";
             outputRecord += AddAddedRecord() + ",";
             outputRecord += AddSDFRecord() + ",";
@@ -1585,8 +1603,10 @@ namespace Diff_Tools
                     {
                         rollBackRecord += "|";
                     }
-                    rollBackRecord += rollBackLV.Items[i].Text;
-
+                    else
+                    {
+                        rollBackRecord += rollBackLV.Items[i].Text;
+                    }
                 }
             }
             return rollBackRecord;
@@ -1597,7 +1617,7 @@ namespace Diff_Tools
             string addedRecord = "";
             if (addFileLV.Items.Count > 1)
             {
-                for (var i = 0; i < addFileLV.Items.Count; i++)
+                for (var i = 0; i < addFileLV.Items.Count - 1; i++)
                 {
                     if (addFileLV.Items[i].Text == "==========") 
                     {
@@ -1618,7 +1638,7 @@ namespace Diff_Tools
             string sdfRecord = "";
             if (servoLV.Items.Count > 0)
             {
-                for (var i = 0; i < servoLV.Items.Count; i++)
+                for (var i = 0; i < servoLV.Items.Count-1; i++)
                 {
                     if (servoLV.Items[i].Text == "==========")
                     {
@@ -1691,6 +1711,7 @@ namespace Diff_Tools
                     }
                 }
             }
+            customRecord = customRecord.Replace("\r", "");
             return customRecord;
         }
 

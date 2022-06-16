@@ -70,6 +70,18 @@ namespace Diff_Tools
                     inputStack.Pop();
                 }
             }
+            if (inputStack.Peek().Contains("|"))
+            {
+                int charPos = inputStack.Peek().IndexOf("|");
+                lOrM = inputStack.Peek().Substring(4, 1);
+                if (charPos > 6)
+                {
+                    lOrM = inputStack.Peek().Substring(charPos - 2, 1);
+                }
+                
+                controlType = inputStack.Peek();
+                return;
+            }
             if (inputStack.Peek().Length > 6)
             {
                 lOrM = inputStack.Peek().Substring(inputStack.Peek().Length - 2, 1);

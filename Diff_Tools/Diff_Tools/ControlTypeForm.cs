@@ -43,12 +43,14 @@ namespace Diff_Tools
                     int compareResult;
                     if( i == 0)
                     {
-                        machineType = controlTypeLB.SelectedItems[i].ToString().Substring(4, 1);
+                        machineType = controlTypeLB.SelectedItems[i].ToString().Length > 6 ? controlTypeLB.SelectedItems[i].ToString().Substring(controlTypeLB.SelectedItems[i].ToString().Length - 2, 1) : controlTypeLB.SelectedItems[i].ToString().Substring(4, 1);
                     }
 
                     if (i > 0)
                     {
-                        compareResult = string.Compare(machineType, controlTypeLB.SelectedItems[i].ToString().Substring(4,1));
+                        string ctrlTypeChar = controlTypeLB.SelectedItems[i].ToString().Length > 6 ?  controlTypeLB.SelectedItems[i].ToString().Substring(controlTypeLB.SelectedItems[i].ToString().Length - 2, 1):controlTypeLB.SelectedItems[i].ToString().Substring(4,1);
+
+                        compareResult = string.Compare(machineType, ctrlTypeChar);
                         if(compareResult != 0)
                         {
                             MessageBox.Show("Select all Machining Centers or all Lathes");
@@ -78,7 +80,7 @@ namespace Diff_Tools
                     controlTypeValue += controlTypeLB.SelectedItems[i].ToString();
                     break;
                 }
-                controlTypeValue += controlTypeLB.SelectedItems[i].ToString() + ":";
+                controlTypeValue += controlTypeLB.SelectedItems[i].ToString() + "|";
                 
             }
             return controlTypeValue;

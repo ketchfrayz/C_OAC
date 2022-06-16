@@ -333,7 +333,7 @@ namespace Diff_Tools
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "DAU ATLAS - 1.0.1";
+            this.Text = "DAU ATLAS - 1.1.1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
