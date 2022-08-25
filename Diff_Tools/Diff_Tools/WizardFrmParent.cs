@@ -158,8 +158,8 @@ namespace Diff_Tools
 
         public void AppendRuleToCSVFile()
         {
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             File.AppendAllText(filePath, Environment.NewLine + currentRule.GetCompleteRule());
             
         }

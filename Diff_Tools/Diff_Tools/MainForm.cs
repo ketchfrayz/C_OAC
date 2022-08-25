@@ -35,8 +35,8 @@ namespace Diff_Tools
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             string fullText;
             rulesDT = new DataTable("Rules");
             if (File.Exists(filePath))
@@ -76,8 +76,8 @@ namespace Diff_Tools
         private void PopAPIDT()
         {
             apiDS = new DataSet();
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
             string fullText;
             apiDT = new DataTable("APIVersion");
             if (File.Exists(filePath)) 
@@ -1565,8 +1565,8 @@ namespace Diff_Tools
         public void outputToLog(string outputRecord)
         {
             //string outputRecord
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
             if (!File.Exists(filePath))
             {
                 using (var sw = File.CreateText(filePath))

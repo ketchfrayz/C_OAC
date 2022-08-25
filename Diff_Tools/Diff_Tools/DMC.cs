@@ -27,6 +27,11 @@ namespace Diff_Tools
                                                                                  "MW$", "W$" };
         public bool IsBSpecPLC(string plcVer)
         {
+
+            if (plcVer == "")
+            {
+                return false;
+            }
             if(plcVer.Substring(4,1) != "Z")
             {
                 return false;
