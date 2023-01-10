@@ -161,6 +161,9 @@
     <Compile Include="ExistingForm.Designer.cs">
       <DependentUpon>ExistingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GrinderDMC.cs" />
+    <Compile Include="LatheDMC.cs" />
+    <Compile Include="MachiningCenterDMC.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
