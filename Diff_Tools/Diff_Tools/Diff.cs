@@ -38,11 +38,6 @@ namespace Diff_Tools
             }
         }
 
-        public string MachineType
-        {
-            get => machineType;
-            set => machineType = value;
-        }
        public string SerialNumber
         {
             get => serialNumber;
@@ -50,9 +45,6 @@ namespace Diff_Tools
         }
 
         public string FileLocation
-        { get; set; }
-
-        public bool AotFlag
         { get; set; }
 
         public bool SafetyFlag
@@ -64,11 +56,6 @@ namespace Diff_Tools
         public List<string> GetIOFiles()
         {
             return ioFiles;
-        }
-
-        public string GetIOFiles(int index)
-        {
-            return ioFiles[index];
         }
 
         public void AddIOFiles(string value)
@@ -140,11 +127,6 @@ namespace Diff_Tools
         public List<string> GetSafetyFiles()
         {
             return safetyFiles;
-        }
-
-        public string GetSafetyFiles(int index)
-        {
-            return safetyFiles[index];
         }
 
         public void AddSafetyFiles(string value)

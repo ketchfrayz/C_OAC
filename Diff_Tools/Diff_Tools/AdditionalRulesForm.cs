@@ -133,6 +133,7 @@ namespace Diff_Tools
                     break;
             }
         }
+
         private void UpdateLNCControlLbl(string controlType)
         {
             switch (controlType)
@@ -174,7 +175,6 @@ namespace Diff_Tools
             }
         }
        
-
         private void ShowSelectedControls(string ruleType)
         {
             switch (ruleType)
@@ -253,6 +253,21 @@ namespace Diff_Tools
         private void PopulateCriteriaList(string lOrMC)
         {
             plcCB.Items.Clear();
+            if (WizardFrmParent.currentRule.GetControlType().Contains("|"))
+            {
+                criteriaCB.Items.Add("SPEC CODE");
+                if (lOrMC == "L")
+                {
+                    specTypeCB.Items.AddRange(latheSpecType);
+                }
+
+                if (lOrMC == "M")
+                {
+                    criteriaCB.Items.Add("MPRM");
+                    specTypeCB.Items.AddRange(mcSpecType);
+                }
+                    return;
+            }
             if (lOrMC == "L")
             {
                 criteriaCB.Items.AddRange(latheCriteria);
