@@ -35,8 +35,8 @@ namespace Diff_Tools
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             string fullText;
             rulesDT = new DataTable("Rules");
             if (File.Exists(filePath))
@@ -76,8 +76,8 @@ namespace Diff_Tools
         private void PopAPIDT()
         {
             apiDS = new DataSet();
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
             string fullText;
             apiDT = new DataTable("APIVersion");
             if (File.Exists(filePath)) 
@@ -219,6 +219,48 @@ namespace Diff_Tools
             
             }
             return false;
+        }
+        private void CheckDupETC(DMC iDmc)
+        {
+            var result = iDmc.GetETC().Intersect(iDmc.GetPBUDAT()); // check to see if any files in ETC exist in PBU-DAT
+            if (result.Count() != 0)
+            {
+                for (var i = 0; i < result.Count(); i++)
+                { 
+                    rulesLB.Items.Add(result.ToList()[i] + " exists in ETC and PBU-DAT"); // add duplicate file to apiLB
+                    rulesLB.Items.Add("==========");
+                }
+            }
+            result = iDmc.GetETC().Intersect(iDmc.GetPBUDAT());     // check to see if any files in ETC exist in CNS-DAT
+            if (result.Count() != 0)
+            {
+                for (var i = 0; i < result.Count(); i++)
+                {
+                    rulesLB.Items.Add(result.ToList()[i] + " exists in ETC and CNS-DAT"); // add duplicate file to apiLB
+                    rulesLB.Items.Add("==========");
+                }
+            }
+
+            for (var i = 0; i < iDmc.GetETC().Count; i++)
+            {
+                for (var a = 0; a < iDmc.GetPBUDAT().Count; a++)
+                {
+                    if (iDmc.GetETC(i).Substring(0, 5) == iDmc.GetPBUDAT(a).Substring(0, 5))
+                    {
+                        rulesLB.Items.Add(iDmc.GetETC(i).Substring(0,4) + " exists in ETC and PBU-DAT");
+                        rulesLB.Items.Add("==========");
+                    }
+                }
+
+                for (var a = 0; a < iDmc.GetCNSDAT().Count; a++)
+                {
+                    if (iDmc.GetETC(i).Substring(0,5) == iDmc.GetCNSDAT(a).Substring(0, 5))
+                    {
+                        rulesLB.Items.Add(iDmc.GetETC(i).Substring(0,4) + " exists in ETC and CNS-DAT");
+                        rulesLB.Items.Add("==========");
+                    }
+                }
+            }
         }
         private void MoveEXE()
         {
@@ -452,12 +494,16 @@ namespace Diff_Tools
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             ResetForm();
+            // Create instance of Diff and DMC class
             diff = new Diff();
             dmc = new DMC();
+
+            // Get path of drag/drop file
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-           if (files.Length == 1)
+
+           if (files.Length == 1)   // If number of files drag/drop is one
             {
-                if (Path.GetExtension(files[0]) == ".DAT")
+                if (Path.GetExtension(files[0]) == ".DAT")  // If file extension is DAT
                 {
                     diff.FileLocation = files[0];
                     dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
@@ -640,26 +686,26 @@ namespace Diff_Tools
             int fsModDiv;
             do
             {
-                count2 = int.Parse(diff.GetHexIndex(count)) + 1;
+                count2 = int.Parse(diff.GetHexIndex(count)) + 1; // Get hexindex for file section starting point
                 do
                 {
-                    diff.AddFileSection(diff.GetTrimFileContents(count2));
+                    diff.AddFileSection(diff.GetTrimFileContents(count2)); // Add FileContents[count2] to FileSection list
                     count2 += 1;
-                } while (count2 != int.Parse(diff.GetHexIndex(count + 1)));
+                } while (count2 != int.Parse(diff.GetHexIndex(count + 1))); // Loop until index of next hexIndex
                 
                 fsIntDiv = diff.GetFileSection().Count/2;
-                fsModDiv = diff.GetFileSection().Count % 2;
-                int mpIndex = diff.GetFileSection().IndexOf("---");
-                if(mpIndex != -1) {
+                fsModDiv = diff.GetFileSection().Count % 2; // 0 = File added or removed 1 = No files added or removed
+                int mpIndex = diff.GetFileSection().IndexOf("---"); 
+                if(mpIndex != -1) {                                         // If file section contains "---"
                     if (fsIntDiv == mpIndex && fsModDiv == 1)
                     {
                         for (var i = 0; i < diff.GetFileSection().IndexOf("---"); i++)
                         {
                             CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)));
                         }
-                    } else if(fsIntDiv != mpIndex || fsModDiv == 0)
+                    } else if(fsIntDiv != mpIndex || fsModDiv == 0)             // If "---" isn't in middle of list
                     {
-                        if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){
+                        if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){    // If file is added in file section
                             for (var i = 0; i < mpIndex; i++)
                             {
                                 CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)));
@@ -674,7 +720,7 @@ namespace Diff_Tools
                                     CheckSpecCond(diff.GetFileSection(i));
                                 }
                             }
-                        } else if((mpIndex + 1) * 2 > diff.GetFileSection().Count())
+                        } else if((mpIndex + 1) * 2 > diff.GetFileSection().Count())    // If file is removed in file section
                         {
                             int startAdd = ((diff.GetFileSection().Count()) - (mpIndex + 1));
                             for (var i = startAdd; i < mpIndex; i++){
@@ -692,14 +738,15 @@ namespace Diff_Tools
                             }
                         }
                     }
-                } else if(mpIndex == -1)
+                } else if(mpIndex == -1)    // If file section doesn't contain "---" (Only add or remove)
                 {
                     for (var i = 0; i <= diff.GetFileSection().Count() - 1; i++)
                     {
-                        if (!(diff.GetFileSection().Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *             ")))
+                        if (!(diff.GetFileSection().Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *             ")))    // If file section doesn't contain SAFETY and file section[i] isn't prod comment
                         {
                             if (!diff.GetFileSection(i).StartsWith("> *"))
                             {
+                                // Add FileSection[i] to mainFrm LV and highlight on Diff text
                                 addFileLV.Items.Add(diff.GetFileSection(i));
                                 addFileLV.Items.Add("==========");
                                 HighlightFlags(diff.GetFileSection(i), 'a');
@@ -725,6 +772,7 @@ namespace Diff_Tools
                 diff.GetFileSection().Clear();
                 count += 1;
             } while (count < diff.GetHexIndex().Count - 1);
+            CheckDupETC(dmc);
             if (dmc.ApiVer != "NONE") { CheckAPIDS(dmc); }
             
             CheckIORev(diff.GetIOFiles());
@@ -1565,8 +1613,8 @@ namespace Diff_Tools
         public void outputToLog(string outputRecord)
         {
             //string outputRecord
-            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
-            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
+            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
+            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
             if (!File.Exists(filePath))
             {
                 using (var sw = File.CreateText(filePath))

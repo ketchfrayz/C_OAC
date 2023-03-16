@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using iText.Kernel.Exceptions;
+
 namespace Diff_Tools
 {
     public class DMC
@@ -14,14 +16,17 @@ namespace Diff_Tools
         private List<string> PLC1 = new List<string>();
         private List<string> PLC2 = new List<string>();
         private List<string> PLC3 = new List<string>();
+        private List<string> ETC = new List<string>();
+        private List<string> PBUDAT = new List<string>();
+        private List<string> CNSDAT = new List<string>();
         private List<string> specSepIndex = new List<string>();
         private List<string> origLISTAFileContents = new List<string>();
         private List<string> origDMCFileContents = new List<string>();
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
-                                                          "/(PLC2)", "/(PCG2)"};
-        private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)" };
-        private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)" };
+                                                          "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
+        private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)", "/(ETC)" };
+        private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)", "/(ETC)" };
         private string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
         private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
                                                                                  "MW$", "W$" };
@@ -124,6 +129,35 @@ namespace Diff_Tools
             return NCB1[index];
         }
 
+        public string GetPBUDAT(int index)
+        {
+            return PBUDAT[index];
+        }
+
+        public List<string> GetPBUDAT()
+        {
+            return PBUDAT;
+        }
+
+        public List<string> GetCNSDAT()
+        {
+            return CNSDAT;
+        }
+
+        public string GetCNSDAT(int index)
+        {
+            return CNSDAT[index];
+        }
+
+        public List<string> GetETC()
+        {
+            return ETC;
+        }
+
+        public string GetETC(int index)
+        {
+            return ETC[index];
+        }
         public void AddNCB1(string value)
         {
             NCB1.Add(value);
@@ -369,6 +403,48 @@ namespace Diff_Tools
         {
             VDRV = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
         }
+
+        private string ShortenPathName(string path)
+        {
+            string[] splitString = path.Split('\\');    // split string by '\', last item in list is file name
+            splitString[splitString.Count() - 1] = splitString[splitString.Count() - 1].Substring(0, splitString[splitString.Count() - 1].Length - 4);  // Remove file extension
+            return splitString[splitString.Count() - 1];
+        }
+
+        private void FillClassVarCNSDAT(int index)
+        {
+            int i = index + 2;
+            while (origLISTAFileContents[i] != "*")
+            {
+                CNSDAT.Add(ShortenPathName(origLISTAFileContents[i]));
+                i++;
+            }
+        }
+
+        private void FillClassVarPBUDAT(int index)
+        {
+            int i = index + 2;
+            //string[] splitstring;
+            while (origLISTAFileContents[i] != "*")    // Loop until end of PBU-DAT block
+            {
+                PBUDAT.Add(ShortenPathName(origLISTAFileContents[i]));
+                i++;
+            }
+        }
+        private void FillClassVarETC(int index)
+        {
+            int i = index + 2;
+            //string[] splitString;
+            while (origLISTAFileContents[i] != "*")     // Loop until end of Var block
+            {
+                //splitString = origLISTAFileContents[i].Split('\\');
+                //splitString[splitString.Count() - 1] = splitString[splitString.Count() - 1].Substring(0, splitString[splitString.Count() - 1].Length - 4);
+                
+                ETC.Add(ShortenPathName(origLISTAFileContents[i]));
+                i++;
+            }
+
+        }
         public void fillClassVar()
         {
 
@@ -397,11 +473,14 @@ namespace Diff_Tools
                     FillClassVarPLC1Hex(origLISTAFileContents.IndexOf(dmcLabel[9]));
                     FillClassVarPLC2Hex(origLISTAFileContents.IndexOf(dmcLabel[10]));
                     FillClassVarVSYS(origLISTAFileContents.IndexOf(dmcLabel[11]));
+                    FillClassVarPBUDAT(origLISTAFileContents.IndexOf(dmcLabel[12]));
+                    FillClassVarCNSDAT(origLISTAFileContents.IndexOf(dmcLabel[13]));
+                    FillClassVarETC(origLISTAFileContents.IndexOf(dmcLabel[14]));
 
             if (origLISTAFileContents.Contains("/(NCB2)"))
             {
                 dmcLabel.Add("/(NCB2)");
-                FillClassVarNCB2Hex(origLISTAFileContents.IndexOf(dmcLabel[12]));
+                FillClassVarNCB2Hex(origLISTAFileContents.IndexOf(dmcLabel[15]));
             }
             if (origLISTAFileContents.Contains("/(PLC3)")) 
             {
@@ -502,6 +581,7 @@ namespace Diff_Tools
         { get; set; }
         public string FileLocation
         { get; set; }
+        
 
         public string SerialNumber
         { get; set; }

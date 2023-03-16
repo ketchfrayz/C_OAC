@@ -80,7 +80,7 @@ namespace Diff_Tools
             this.Label7.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label7.Location = new System.Drawing.Point(28, 101);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(61, 13);
+            this.Label7.Size = new System.Drawing.Size(150, 34);
             this.Label7.TabIndex = 7;
             this.Label7.Text = "Servo Data";
             // 
@@ -99,7 +99,7 @@ namespace Diff_Tools
             this.Label5.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label5.Location = new System.Drawing.Point(28, 73);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(62, 13);
+            this.Label5.Size = new System.Drawing.Size(152, 34);
             this.Label5.TabIndex = 5;
             this.Label5.Text = "PIOD/SIOD";
             // 
@@ -118,7 +118,7 @@ namespace Diff_Tools
             this.Label3.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label3.Location = new System.Drawing.Point(28, 45);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(68, 13);
+            this.Label3.Size = new System.Drawing.Size(168, 34);
             this.Label3.TabIndex = 3;
             this.Label3.Text = "File Add/Del";
             // 
@@ -137,7 +137,7 @@ namespace Diff_Tools
             this.Label1.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label1.Location = new System.Drawing.Point(28, 18);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(83, 13);
+            this.Label1.Size = new System.Drawing.Size(203, 34);
             this.Label1.TabIndex = 1;
             this.Label1.Text = "File rolled back";
             // 
@@ -183,10 +183,11 @@ namespace Diff_Tools
             this.apiLB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.apiLB.FormattingEnabled = true;
             this.apiLB.HorizontalScrollbar = true;
+            this.apiLB.ItemHeight = 33;
             this.apiLB.Location = new System.Drawing.Point(536, 436);
             this.apiLB.Name = "apiLB";
             this.apiLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.apiLB.Size = new System.Drawing.Size(333, 82);
+            this.apiLB.Size = new System.Drawing.Size(333, 70);
             this.apiLB.TabIndex = 21;
             // 
             // rollBackLV
@@ -252,13 +253,14 @@ namespace Diff_Tools
             // menuStrip1
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(886, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(886, 45);
             this.menuStrip1.TabIndex = 27;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -267,13 +269,13 @@ namespace Diff_Tools
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(88, 41);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(231, 54);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -283,20 +285,20 @@ namespace Diff_Tools
             this.addNewRuleToolStripMenuItem,
             this.viewExistingRulesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(145, 41);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // addNewRuleToolStripMenuItem
             // 
             this.addNewRuleToolStripMenuItem.Name = "addNewRuleToolStripMenuItem";
-            this.addNewRuleToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.addNewRuleToolStripMenuItem.Size = new System.Drawing.Size(430, 54);
             this.addNewRuleToolStripMenuItem.Text = "Add new rule";
             this.addNewRuleToolStripMenuItem.Click += new System.EventHandler(this.addNewRuleToolStripMenuItem_Click);
             // 
             // viewExistingRulesToolStripMenuItem
             // 
             this.viewExistingRulesToolStripMenuItem.Name = "viewExistingRulesToolStripMenuItem";
-            this.viewExistingRulesToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.viewExistingRulesToolStripMenuItem.Size = new System.Drawing.Size(430, 54);
             this.viewExistingRulesToolStripMenuItem.Text = "View existing rules";
             this.viewExistingRulesToolStripMenuItem.Click += new System.EventHandler(this.viewExistingRulesToolStripMenuItem_Click);
             // 
@@ -306,16 +308,17 @@ namespace Diff_Tools
             this.rulesLB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rulesLB.FormattingEnabled = true;
             this.rulesLB.HorizontalScrollbar = true;
+            this.rulesLB.ItemHeight = 33;
             this.rulesLB.Location = new System.Drawing.Point(536, 522);
             this.rulesLB.Name = "rulesLB";
             this.rulesLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.rulesLB.Size = new System.Drawing.Size(333, 82);
+            this.rulesLB.Size = new System.Drawing.Size(333, 70);
             this.rulesLB.TabIndex = 28;
             // 
             // mainForm
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 685);
             this.Controls.Add(this.rulesLB);
@@ -333,7 +336,7 @@ namespace Diff_Tools
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "DAU ATLAS - 1.1.1";
+            this.Text = "DAU ATLAS - 1.2.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
