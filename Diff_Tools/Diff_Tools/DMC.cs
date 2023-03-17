@@ -10,18 +10,18 @@ namespace Diff_Tools
 {
     public class DMC
     {
-        private List<string> NC1 = new List<string>();
-        private List<string> NCB1 = new List<string>();
-        private List<string> NCB2 = new List<string>();
-        private List<string> PLC1 = new List<string>();
-        private List<string> PLC2 = new List<string>();
-        private List<string> PLC3 = new List<string>();
-        private List<string> ETC = new List<string>();
-        private List<string> PBUDAT = new List<string>();
-        private List<string> CNSDAT = new List<string>();
-        private List<string> specSepIndex = new List<string>();
-        private List<string> origLISTAFileContents = new List<string>();
-        private List<string> origDMCFileContents = new List<string>();
+        private List<string> NC1;
+        private List<string> NCB1;
+        private List<string> NCB2;
+        private List<string> PLC1;
+        private List<string> PLC2;
+        private List<string> PLC3;
+        private List<string> ETC;
+        private List<string> PBUDAT;
+        private List<string> CNSDAT;
+        private List<string> specSepIndex;
+        private List<string> origLISTAFileContents;
+        private List<string> origDMCFileContents;
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
                                                           "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
@@ -30,6 +30,22 @@ namespace Diff_Tools
         private string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
         private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
                                                                                  "MW$", "W$" };
+
+        public DMC()    // DMC class constructor
+        {
+            this.NC1 = new List<string>();
+            this.NCB1 = new List<string>();
+            this.NCB2 = new List<string>();
+            this.PLC1 = new List<string>();
+            this.PLC2 = new List<string>();
+            this.PLC3 = new List<string>();
+            this.ETC =  new List<string>();
+            this.PBUDAT = new List<string>();
+            this.CNSDAT = new List<string>();
+            this.specSepIndex = new List<string>();
+            this.origLISTAFileContents = new List<string>();
+            this.origDMCFileContents = new List<string>();
+        }
         public bool IsBSpecPLC(string plcVer)
         {
 
@@ -68,10 +84,7 @@ namespace Diff_Tools
             }
             return true;
         }
-        //public List<string> GetSpecSepIndex()
-        //{
-        //    return specSepIndex;
-        //}
+
         private string TrimMachineType(string machineType)
         {
             if (machineType == "L400II" || machineType == "L250II" || machineType == "MB-5000HII")
@@ -110,23 +123,10 @@ namespace Diff_Tools
         {
             return NC1;
         }
-        public string GetNC1(int index)
-        {
-            return NC1[index];
-        }
-
-        public void AddNC1(string value)
-        {
-            NC1.Add(value);
-        }
 
         public List<string> GetNCB1()
         {
             return NCB1;
-        }
-        public string GetNCB1(int index)
-        {
-            return NCB1[index];
         }
 
         public string GetPBUDAT(int index)
@@ -158,65 +158,25 @@ namespace Diff_Tools
         {
             return ETC[index];
         }
-        public void AddNCB1(string value)
-        {
-            NCB1.Add(value);
-        }
 
         public List<string> GetNCB2()
         {
             return NCB2;
-        }
-        public string GetNCB2(int index)
-        {
-            return NCB2[index];
-        }
-
-        public void AddNCB2(string value)
-        {
-            NCB2.Add(value);
         }
 
         public List<string> GetPLC1()
         {
             return PLC1;
         }
-        public string GetPLC1(int index)
-        {
-            return PLC1[index];
-        }
-
-        public void AddPLC1(string value)
-        {
-            PLC1.Add(value);
-        }
 
         public List<string> GetPLC2()
         {
             return PLC2;
         }
-        public string GetPLC2(int index)
-        {
-            return PLC2[index];
-        }
-
-        public void AddPLC2(string value)
-        {
-            PLC2.Add(value);
-        }
 
         public List<string> GetPLC3()
         {
             return PLC3;
-        }
-        public string GetPLC3(int index)
-        {
-            return PLC3[index];
-        }
-
-        public void AddPLC3(string value)
-        {
-            PLC3.Add(value);
         }
 
         public void FillSpecCodeList()
@@ -269,15 +229,6 @@ namespace Diff_Tools
 
 
         }
-        private bool HasAPI()
-        {
-            if (!origLISTAFileContents.Contains("/(CDAD001)"))
-            {
-                return false;
-            }
-            return true;
-        }
-
 
         public bool IsLathe(string controlType)
         {
@@ -287,20 +238,6 @@ namespace Diff_Tools
             }
 
             if (origLISTAFileContents[origLISTAFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("MNC"))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool IsMachiningCenter(string controlType)
-        {
-            if (controlType.EndsWith("L") || controlType.EndsWith("LA"))
-            {
-                return false;
-            }
-
-            if (origLISTAFileContents[origLISTAFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("LNC"))
             {
                 return false;
             }
@@ -434,16 +371,18 @@ namespace Diff_Tools
         private void FillClassVarETC(int index)
         {
             int i = index + 2;
-            //string[] splitString;
+            string fileExt;
+
             while (origLISTAFileContents[i] != "*")     // Loop until end of Var block
             {
-                //splitString = origLISTAFileContents[i].Split('\\');
-                //splitString[splitString.Count() - 1] = splitString[splitString.Count() - 1].Substring(0, splitString[splitString.Count() - 1].Length - 4);
-                
-                ETC.Add(ShortenPathName(origLISTAFileContents[i]));
+
+                fileExt = origLISTAFileContents[i].Substring(origLISTAFileContents[i].Length - 4);
+                if (fileExt != ".DEF" && fileExt != ".CNC" && fileExt != ".INI"  && fileExt != ".BMP")          // If file is .CNS or .PBU
+                {   
+                    ETC.Add(ShortenPathName(origLISTAFileContents[i]));                                             // Remove path and add filename to the list
+                }
                 i++;
             }
-
         }
         public void fillClassVar()
         {

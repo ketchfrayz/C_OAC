@@ -21,7 +21,7 @@ namespace Diff_Tools
         int numTicks;
         private Diff diff;
         private DMC dmc;
-        public List<Action> checks = new List<Action>();
+        private List<Action> checks;
         static  private DataTable apiDT;
         static private DataSet apiDS;
         static public DataSet rulesDS;
@@ -32,6 +32,145 @@ namespace Diff_Tools
         {
             InitializeComponent();
         }
+
+        // Form event handlers
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            // Clear RTB, LB, and LV of MainForm
+            ResetForm();
+
+            // Create instance of Diff and DMC class
+            diff = new Diff();
+            dmc = new DMC();
+            checks = new List<Action>();
+
+            // Get path of drag/drop file
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Length == 1)   // If number of files drag/drop is one
+            {
+                if (Path.GetExtension(files[0]) == ".DAT")  // If file extension is DAT
+                {
+                    diff.FileLocation = files[0];
+                    dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
+                    ReadFileData();
+                    diff.SetTrimFileContents(TrimBeginEnd(diff.GetOrigFileContents()));
+                    diff.SetHexIndex(GetHexIndex(diff.GetTrimFileContents()));
+                    ProcessDiff();
+                    CheckAgainstRulesDB();
+                    ChangeFlagColor();
+                    outputToLog(CreateOutputRecord());
+                }
+                else
+                {
+                    MessageBox.Show("Only files with a .DAT extension are supported!!!");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Only drag and drop 1 file!!!");
+                return;
+            }
+        }
+
+        private void AddFileLV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection addFile = addFileLV.SelectedItems;
+            if (addFile.Count > 0)
+            {
+                if (addFile[0].Text != "---" || addFile[0].Text != "==========" || addFile[0].Text != "")
+                {
+                    FindEntry(addFile[0].Text);
+                }
+            }
+        }
+
+        private void RollBackLV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection rollBack = rollBackLV.SelectedItems;
+            if (rollBack.Count > 0)
+            {
+                if (rollBack[0].Text != "---" && rollBack[0].Text != "==========" && rollBack[0].Text != "")
+                {
+                    FindEntry(rollBack[0].Text);
+                }
+            }
+        }
+
+        private void ServoLV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection servo = servoLV.SelectedItems;
+            if (servo.Count > 0)
+            {
+
+                if (servo[0].Text != "---" && servo[0].Text != "==========" && servo[0].Text != "")
+                {
+                    FindEntry(servo[0].Text);
+                }
+            }
+        }
+
+        private void PiodLV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection ioFile = piodLV.SelectedItems;
+            if (ioFile.Count > 0)
+            {
+
+                if (ioFile[0].Text != "---" && ioFile[0].Text != "==========" && ioFile[0].Text != "")
+                {
+                    FindEntry(ioFile[0].Text);
+                }
+            }
+        }
+
+        private void MainForm_Load(object sender, System.EventArgs e)
+        {
+            PopAPIDT();
+            PopRulesDT();
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            if (numTicks < 10)
+            {
+                ChangeIOColor();
+                numTicks += 1;
+            }
+            else
+            {
+                Timer1.Stop();
+            }
+        }
+
+        private void addNewRuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WizardFrmParent wizardFrmParent = new WizardFrmParent();
+            wizardFrmParent.ShowDialog();
+            //controlTypeForm.ShowDialog();
+        }
+
+        private void viewExistingRulesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PopRulesDT();
+            ExistingForm exform = new ExistingForm(rulesDS);
+            exform.ShowDialog();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
@@ -406,64 +545,8 @@ namespace Diff_Tools
                 }
             }
         }
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            if (numTicks < 10)
-            {
-                ChangeIOColor();
-                numTicks += 1;
-            }
-            else
-            {
-                Timer1.Stop();
-            }
-        }
-        private void AddFileLV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListView.SelectedListViewItemCollection addFile = addFileLV.SelectedItems;
-            if (addFile.Count > 0)
-            {
-                if (addFile[0].Text != "---" || addFile[0].Text != "==========" || addFile[0].Text != "")
-                {
-                    FindEntry(addFile[0].Text);
-                }
-            }
-        }
-        private void RollBackLV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListView.SelectedListViewItemCollection rollBack = rollBackLV.SelectedItems;
-            if (rollBack.Count > 0)
-            {
-                if (rollBack[0].Text != "---" && rollBack[0].Text != "==========" && rollBack[0].Text != "")
-                {
-                    FindEntry(rollBack[0].Text);
-                }
-            }
-        }
-        private void ServoLV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListView.SelectedListViewItemCollection servo = servoLV.SelectedItems;
-            if (servo.Count > 0)
-            {
-               
-                if (servo[0].Text != "---" && servo[0].Text != "==========" && servo[0].Text != "")
-                {
-                    FindEntry(servo[0].Text);
-                }
-            }
-        }
-        private void PiodLV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListView.SelectedListViewItemCollection ioFile = piodLV.SelectedItems;
-            if (ioFile.Count > 0)
-            {
+        
 
-                if (ioFile[0].Text != "---" && ioFile[0].Text != "==========" && ioFile[0].Text != "")
-                {
-                    FindEntry(ioFile[0].Text);
-                }
-            }
-        }
         public void FindEntry(string textLine)
         {
             int pos = 0;
@@ -478,55 +561,8 @@ namespace Diff_Tools
                 pos = displayRTB.Find(textLine, pos + 1, RichTextBoxFinds.MatchCase);
             }
         }
-        private void MainForm_Load(object sender, System.EventArgs e)
-        {
-            PopAPIDT();
-            PopRulesDT();
-        }
-        private void MainForm_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
 
-        private void MainForm_DragDrop(object sender, DragEventArgs e)
-        {
-            ResetForm();
-            // Create instance of Diff and DMC class
-            diff = new Diff();
-            dmc = new DMC();
 
-            // Get path of drag/drop file
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-           if (files.Length == 1)   // If number of files drag/drop is one
-            {
-                if (Path.GetExtension(files[0]) == ".DAT")  // If file extension is DAT
-                {
-                    diff.FileLocation = files[0];
-                    dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
-                    ReadFileData();
-                    diff.SetTrimFileContents(TrimBeginEnd(diff.GetOrigFileContents()));
-                    diff.SetHexIndex(GetHexIndex(diff.GetTrimFileContents()));
-                    ProcessDiff();
-                    CheckAgainstRulesDB();
-                    ChangeFlagColor();
-                    outputToLog(CreateOutputRecord());
-                }
-                else
-                {
-                    MessageBox.Show("Only files with a .DAT extension are supported!!!");
-                    return;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Only drag 1 file!!!");
-                return;
-            }
-        }
         public void CompareFiles(string prevFile, string newFile)
         {
             if (!(prevFile.StartsWith("< * cspsVer") && newFile.StartsWith("> * cspsVer")))
@@ -676,6 +712,7 @@ namespace Diff_Tools
         
         public void ProcessDiff()
         {
+            // Add column to form ListViews
             addFileLV.Columns.Add("MyColumn", -2);
             rollBackLV.Columns.Add("MyColumn", -2);
             servoLV.Columns.Add("MyColumn", -2);
@@ -686,37 +723,39 @@ namespace Diff_Tools
             int fsModDiv;
             do
             {
-                count2 = int.Parse(diff.GetHexIndex(count)) + 1; // Get hexindex for file section starting point
+                count2 = int.Parse(diff.GetHexIndex(count)) + 1;                                                        // Get hexindex for file section starting point
                 do
                 {
-                    diff.AddFileSection(diff.GetTrimFileContents(count2)); // Add FileContents[count2] to FileSection list
+                    diff.AddFileSection(diff.GetTrimFileContents(count2));                                                  // Add FileContents[count2] to FileSection list
                     count2 += 1;
-                } while (count2 != int.Parse(diff.GetHexIndex(count + 1))); // Loop until index of next hexIndex
+                } while (count2 != int.Parse(diff.GetHexIndex(count + 1)));                                             // Loop until index of next hexIndex
                 
                 fsIntDiv = diff.GetFileSection().Count/2;
-                fsModDiv = diff.GetFileSection().Count % 2; // 0 = File added or removed 1 = No files added or removed
+                fsModDiv = diff.GetFileSection().Count % 2;                                                             // 0 = Even number of lines, 1 = Odd number of lines
                 int mpIndex = diff.GetFileSection().IndexOf("---"); 
-                if(mpIndex != -1) {                                         // If file section contains "---"
-                    if (fsIntDiv == mpIndex && fsModDiv == 1)
+                if(mpIndex != -1) {                                                                                     // If file section contains "---"
+
+                    if (fsIntDiv == mpIndex && fsModDiv == 1)                                                               //  
                     {
-                        for (var i = 0; i < diff.GetFileSection().IndexOf("---"); i++)
+                        for (var i = 0; i < diff.GetFileSection().IndexOf("---"); i++)                                          // Loop fileSection by 1 until "---"
                         {
-                            CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)));
+                            CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)));   // Compare previous and new file
                         }
-                    } else if(fsIntDiv != mpIndex || fsModDiv == 0)             // If "---" isn't in middle of list
+                    } else if(fsIntDiv != mpIndex || fsModDiv == 0)                                                     // If "---" isn't in middle of list
                     {
-                        if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){    // If file is added in file section
-                            for (var i = 0; i < mpIndex; i++)
+                        if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){                                            // If file is added in file section
+
+                            for (var i = 0; i < mpIndex; i++)                                                                   // Loop fileSection by 1 until "---" index
                             {
-                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)));
+                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)));                       // Compare previous and new file
                             }
-                            for (var i = mpIndex + fsIntDiv; i < diff.GetFileSection().Count(); i++)
+                            for (var i = mpIndex + fsIntDiv; i < diff.GetFileSection().Count(); i++)                            // Loop through leftover fileSection until end
                             {
-                                if (!(diff.GetFileSection(i).Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *")))
+                                if (!(diff.GetFileSection(i).Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *")))       // if current line doesn't equal "SAFETY" AND doesn't start with "> *"        
                                 {
-                                    addFileLV.Items.Add(diff.GetFileSection(i));
+                                    addFileLV.Items.Add(diff.GetFileSection(i));                                                            // Add current line to addFileLV     
                                     addFileLV.Items.Add("==========");
-                                    HighlightFlags(diff.GetFileSection(i), 'a');
+                                    HighlightFlags(diff.GetFileSection(i), 'a');                                                            // Highlight file in displayRTB
                                     CheckSpecCond(diff.GetFileSection(i));
                                 }
                             }
@@ -863,44 +902,7 @@ namespace Diff_Tools
             {
                 displayRTB.Text += diff.GetOrigFileContents(i) + System.Environment.NewLine;
             }
-            //if (File.Exists(listaFileLocation))
-            //{
-            //    using (var sr = new StreamReader(listaFileLocation))
-            //    {
-            //        do
-            //        {
-            //            dmc.AddOrigLISTAFileContents(sr.ReadLine());
-            //        } while (sr.Peek() != -1);
-            //    }
-            //    dmc.ListaFileExists = true;
-            //    dmc.fillClassVar();
-            //    if (diff.SerialNumber != dmc.SerialNumber)
-            //    {
-            //        MessageBox.Show("Diff and Lista serial number do not match.  Put correct LISTA in machine folder.");
-            //    }
-            //}
-            //else
-            //{
-            //    dmc.ListaFileExists = false;
-            //    MessageBox.Show("OSPMNGCD.CNC or LISTA.DAT isn't in " + Path.GetDirectoryName(listaFileLocation) + "!  Checks will be limited, add these files and drag DIFF.DAT onto form.");
-            //}
-            //if (File.Exists(DMCFileLocation))
-            //{
-            //    using (var sr = new StreamReader(DMCFileLocation))
-            //    {
-            //        do
-            //        {
-            //            dmc.AddOrigDMCFileContents(sr.ReadLine());
-            //        } while (sr.Peek() != -1);
-            //    }
-            //    dmc.DMCFileExists = true;
-            //    dmc.FillSpecCodeList();
-
-            //}
-            //else
-            //{
-            //    dmc.DMCFileExists = false;
-            //}
+            
         }
         public List<string> GetHexIndex(List<string> fileList)
         {
@@ -1591,24 +1593,9 @@ namespace Diff_Tools
             return true;
         } //NEED TO TEST
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        
-        private void addNewRuleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WizardFrmParent wizardFrmParent = new WizardFrmParent();
-            wizardFrmParent.ShowDialog();
-            //controlTypeForm.ShowDialog();
-        }
 
-        private void viewExistingRulesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PopRulesDT();
-            ExistingForm exform = new ExistingForm(rulesDS);
-            exform.ShowDialog();
-        }
+        
+        // Output log
     
         public void outputToLog(string outputRecord)
         {
