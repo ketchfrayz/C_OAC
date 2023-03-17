@@ -20,8 +20,8 @@ namespace Diff_Tools
         private List<string> PBUDAT;
         private List<string> CNSDAT;
         private List<string> specSepIndex;
-        private List<string> origLISTAFileContents = new List<string>();
-        private List<string> origDMCFileContents = new List<string>();
+        private List<string> origLISTAFileContents;
+        private List<string> origDMCFileContents;
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
                                                           "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
@@ -229,15 +229,6 @@ namespace Diff_Tools
 
 
         }
-        private bool HasAPI()
-        {
-            if (!origLISTAFileContents.Contains("/(CDAD001)"))
-            {
-                return false;
-            }
-            return true;
-        }
-
 
         public bool IsLathe(string controlType)
         {
@@ -380,16 +371,18 @@ namespace Diff_Tools
         private void FillClassVarETC(int index)
         {
             int i = index + 2;
-            //string[] splitString;
+            string fileExt;
+
             while (origLISTAFileContents[i] != "*")     // Loop until end of Var block
             {
-                //splitString = origLISTAFileContents[i].Split('\\');
-                //splitString[splitString.Count() - 1] = splitString[splitString.Count() - 1].Substring(0, splitString[splitString.Count() - 1].Length - 4);
-                
-                ETC.Add(ShortenPathName(origLISTAFileContents[i]));
+
+                fileExt = origLISTAFileContents[i].Substring(origLISTAFileContents[i].Length - 4);
+                if (fileExt != ".DEF" && fileExt != ".CNC" && fileExt != ".INI"  && fileExt != ".BMP")          // If file is .CNS or .PBU
+                {   
+                    ETC.Add(ShortenPathName(origLISTAFileContents[i]));                                             // Remove path and add filename to the list
+                }
                 i++;
             }
-
         }
         public void fillClassVar()
         {
