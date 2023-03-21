@@ -25,11 +25,11 @@ namespace Diff_Tools
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
                                                           "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
-        private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)", "/(ETC)" };
-        private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)", "/(ETC)" };
+        //private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)", "/(ETC)" };
+        //private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)", "/(ETC)" };
         private string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
-        private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
-                                                                                 "MW$", "W$" };
+        private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW$", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
+                                                                                 "MW$", "W$", "\\-W$", "\\-eMYE$", "\\-eME$", "L$" };
 
         public DMC()    // DMC class constructor
         {
@@ -87,7 +87,7 @@ namespace Diff_Tools
 
         private string TrimMachineType(string machineType)
         {
-            if (machineType == "L400II" || machineType == "L250II" || machineType == "MB-5000HII")
+            if (machineType == "L400II" || machineType == "L250II" || machineType == "MB-5000HII" || machineType == "MA-500HII" || machineType == "MA-600HII" || machineType == "V80L" || machineType == "V100L" || machineType == "LB35II" || machineType == "LB35III" || machineType == "LB45II" || machineType == "LB45III")
             {
                 return machineType;
             }
@@ -256,6 +256,7 @@ namespace Diff_Tools
                 ApiVer = regex.Replace(origLISTAFileContents[index + 1], string.Empty);
                 ApiVer = ApiVer.Substring(ApiVer.IndexOf("V") + 1);
                 ApiVer = ApiVer.Replace("P", "");
+                ApiVer = ApiVer.Replace("W", "");
                 ApiVer = (ApiVer.Contains("-") ? ApiVer.Substring(0, ApiVer.IndexOf("-")).Replace("P", "") : ApiVer.Replace("P", ""));
             }
             else
