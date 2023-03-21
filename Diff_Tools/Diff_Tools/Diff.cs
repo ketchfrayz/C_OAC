@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,27 @@ namespace Diff_Tools
 {
     public class Diff
     {
-        private List<string> origFileContents = new List<string>();
-        private List<string> trimFileContents = new List<string>();
+        private List<string> origFileContents;
+        private List<string> trimFileContents;
         private List<string> hexIndex;
-        private List<string> fileSection = new List<string>();
-        private List<string> safetyFiles = new List<string>();
-        private List<string> ioFiles = new List<string>();
-        private string serialNumber = "";
-        private string machineType = "";
+        private List<string> fileSection;
+        private List<string> safetyFiles;
+        private List<string> ioFiles;
+        private string serialNumber;
+        private string machineType;
 
+
+        public Diff()
+        {
+            origFileContents = new List<string>();
+            trimFileContents = new List<string>();
+            hexIndex = new List<string>();
+            fileSection = new List<string>();
+            safetyFiles = new List<string>();
+            ioFiles = new List<string>();
+            serialNumber = "";
+            machineType = "";
+        }
         public void FillSerialAndTypeVar()
         {
             if (origFileContents[0].StartsWith("Machine Name="))
