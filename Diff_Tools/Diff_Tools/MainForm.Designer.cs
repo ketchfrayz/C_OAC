@@ -61,7 +61,7 @@ namespace Diff_Tools
             // 
             // ioRevLbl
             // 
-            this.ioRevLbl.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ioRevLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ioRevLbl.Location = new System.Drawing.Point(533, 613);
             this.ioRevLbl.Name = "ioRevLbl";
             this.ioRevLbl.Size = new System.Drawing.Size(300, 61);
@@ -77,10 +77,10 @@ namespace Diff_Tools
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label7.Location = new System.Drawing.Point(28, 101);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(150, 34);
+            this.Label7.Size = new System.Drawing.Size(155, 32);
             this.Label7.TabIndex = 7;
             this.Label7.Text = "Servo Data";
             // 
@@ -96,10 +96,10 @@ namespace Diff_Tools
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label5.Location = new System.Drawing.Point(28, 73);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(152, 34);
+            this.Label5.Size = new System.Drawing.Size(158, 32);
             this.Label5.TabIndex = 5;
             this.Label5.Text = "PIOD/SIOD";
             // 
@@ -115,10 +115,10 @@ namespace Diff_Tools
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label3.Location = new System.Drawing.Point(28, 45);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(168, 34);
+            this.Label3.Size = new System.Drawing.Size(170, 32);
             this.Label3.TabIndex = 3;
             this.Label3.Text = "File Add/Del";
             // 
@@ -134,10 +134,10 @@ namespace Diff_Tools
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label1.Location = new System.Drawing.Point(28, 18);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(203, 34);
+            this.Label1.Size = new System.Drawing.Size(206, 32);
             this.Label1.TabIndex = 1;
             this.Label1.Text = "File rolled back";
             // 
@@ -168,7 +168,7 @@ namespace Diff_Tools
             // 
             // displayRTB
             // 
-            this.displayRTB.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.displayRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.displayRTB.Location = new System.Drawing.Point(12, 39);
             this.displayRTB.Name = "displayRTB";
             this.displayRTB.ReadOnly = true;
@@ -180,20 +180,20 @@ namespace Diff_Tools
             // apiLB
             // 
             this.apiLB.BackColor = System.Drawing.SystemColors.Control;
-            this.apiLB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.apiLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.apiLB.FormattingEnabled = true;
             this.apiLB.HorizontalScrollbar = true;
-            this.apiLB.ItemHeight = 33;
+            this.apiLB.ItemHeight = 31;
             this.apiLB.Location = new System.Drawing.Point(536, 436);
             this.apiLB.Name = "apiLB";
             this.apiLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.apiLB.Size = new System.Drawing.Size(333, 70);
+            this.apiLB.Size = new System.Drawing.Size(333, 66);
             this.apiLB.TabIndex = 21;
             // 
             // rollBackLV
             // 
             this.rollBackLV.BackColor = System.Drawing.SystemColors.Control;
-            this.rollBackLV.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rollBackLV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rollBackLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.rollBackLV.HideSelection = false;
             this.rollBackLV.Location = new System.Drawing.Point(536, 39);
@@ -208,7 +208,7 @@ namespace Diff_Tools
             // addFileLV
             // 
             this.addFileLV.BackColor = System.Drawing.SystemColors.Control;
-            this.addFileLV.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addFileLV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addFileLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.addFileLV.HideSelection = false;
             this.addFileLV.Location = new System.Drawing.Point(536, 138);
@@ -223,7 +223,7 @@ namespace Diff_Tools
             // servoLV
             // 
             this.servoLV.BackColor = System.Drawing.SystemColors.Control;
-            this.servoLV.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servoLV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.servoLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.servoLV.HideSelection = false;
             this.servoLV.Location = new System.Drawing.Point(536, 237);
@@ -238,7 +238,7 @@ namespace Diff_Tools
             // piodLV
             // 
             this.piodLV.BackColor = System.Drawing.SystemColors.Control;
-            this.piodLV.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.piodLV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.piodLV.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.piodLV.HideSelection = false;
             this.piodLV.Location = new System.Drawing.Point(536, 337);
@@ -252,7 +252,7 @@ namespace Diff_Tools
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menuStrip1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -260,7 +260,7 @@ namespace Diff_Tools
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(886, 45);
+            this.menuStrip1.Size = new System.Drawing.Size(886, 44);
             this.menuStrip1.TabIndex = 27;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -269,13 +269,13 @@ namespace Diff_Tools
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(88, 41);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 40);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(231, 54);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(228, 54);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -285,40 +285,40 @@ namespace Diff_Tools
             this.addNewRuleToolStripMenuItem,
             this.viewExistingRulesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(145, 41);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(142, 40);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // addNewRuleToolStripMenuItem
             // 
             this.addNewRuleToolStripMenuItem.Name = "addNewRuleToolStripMenuItem";
-            this.addNewRuleToolStripMenuItem.Size = new System.Drawing.Size(430, 54);
+            this.addNewRuleToolStripMenuItem.Size = new System.Drawing.Size(427, 54);
             this.addNewRuleToolStripMenuItem.Text = "Add new rule";
             this.addNewRuleToolStripMenuItem.Click += new System.EventHandler(this.addNewRuleToolStripMenuItem_Click);
             // 
             // viewExistingRulesToolStripMenuItem
             // 
             this.viewExistingRulesToolStripMenuItem.Name = "viewExistingRulesToolStripMenuItem";
-            this.viewExistingRulesToolStripMenuItem.Size = new System.Drawing.Size(430, 54);
+            this.viewExistingRulesToolStripMenuItem.Size = new System.Drawing.Size(427, 54);
             this.viewExistingRulesToolStripMenuItem.Text = "View existing rules";
             this.viewExistingRulesToolStripMenuItem.Click += new System.EventHandler(this.viewExistingRulesToolStripMenuItem_Click);
             // 
             // rulesLB
             // 
             this.rulesLB.BackColor = System.Drawing.SystemColors.Control;
-            this.rulesLB.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rulesLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rulesLB.FormattingEnabled = true;
             this.rulesLB.HorizontalScrollbar = true;
-            this.rulesLB.ItemHeight = 33;
+            this.rulesLB.ItemHeight = 31;
             this.rulesLB.Location = new System.Drawing.Point(536, 522);
             this.rulesLB.Name = "rulesLB";
             this.rulesLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.rulesLB.Size = new System.Drawing.Size(333, 70);
+            this.rulesLB.Size = new System.Drawing.Size(333, 66);
             this.rulesLB.TabIndex = 28;
             // 
             // mainForm
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 33F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 685);
             this.Controls.Add(this.rulesLB);
@@ -331,12 +331,12 @@ namespace Diff_Tools
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.displayRTB);
             this.Controls.Add(this.menuStrip1);
-            this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "DAU ATLAS - 1.2.1";
+            this.Text = "DAU ATLAS - 1.2.2";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
