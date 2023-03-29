@@ -62,8 +62,8 @@ namespace Diff_Tools
                     diff.FileLocation = files[0];
                     dmc.FileLocation = Path.GetDirectoryName(diff.FileLocation);
                     ReadFileData();
-                    diff.SetTrimFileContents(TrimBeginEnd(diff.GetOrigFileContents()));
-                    diff.SetHexIndex(GetHexIndex(diff.GetTrimFileContents()));
+                    diff.TrimFileContents = TrimBeginEnd(diff.OrigFileContents);
+                    diff.HexIndex = GetHexIndex(diff.TrimFileContents);
                     ProcessDiff();
                     CheckAgainstRulesDB();
                     ChangeFlagColor();
@@ -174,8 +174,8 @@ namespace Diff_Tools
         public void PopRulesDT()
         {
             rulesDS = new DataSet();
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\rules.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\rules.CSV";
             string fullText;
             rulesDT = new DataTable("Rules");
             if (File.Exists(filePath))
@@ -215,8 +215,8 @@ namespace Diff_Tools
         private void PopAPIDT()
         {
             apiDS = new DataSet();
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\API_Version.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\API_Version.CSV";
             string fullText;
             apiDT = new DataTable("APIVersion");
             if (File.Exists(filePath)) 
@@ -361,6 +361,7 @@ namespace Diff_Tools
         }
         private void CheckDupETC(DMC iDmc)
         {
+            string etcFirstSection;
             var result = iDmc.GetETC().Intersect(iDmc.GetPBUDAT()); // check to see if any files in ETC exist in PBU-DAT
             if (result.Count() != 0)
             {
@@ -382,21 +383,32 @@ namespace Diff_Tools
 
             for (var i = 0; i < iDmc.GetETC().Count; i++)
             {
+                etcFirstSection = iDmc.GetETC(i);
+                if (etcFirstSection.Contains("-"))
+                {
+                    etcFirstSection = iDmc.GetETC(i).Substring(0, iDmc.GetETC(i).IndexOf("-"));
+                }
                 for (var a = 0; a < iDmc.GetPBUDAT().Count; a++)
                 {
-                    if (iDmc.GetETC(i).Substring(0, 5) == iDmc.GetPBUDAT(a).Substring(0, 5))
+                    if (iDmc.GetPBUDAT(a).Contains("-"))
                     {
-                        rulesLB.Items.Add(iDmc.GetETC(i).Substring(0,4) + " exists in ETC and PBU-DAT");
-                        rulesLB.Items.Add("==========");
+                        if (etcFirstSection == iDmc.GetPBUDAT(a).Substring(0, iDmc.GetPBUDAT(a).IndexOf("-")))
+                        {
+                            rulesLB.Items.Add(etcFirstSection + " exists in ETC and PBU-DAT");
+                            rulesLB.Items.Add("==========");
+                        }
                     }
                 }
 
                 for (var a = 0; a < iDmc.GetCNSDAT().Count; a++)
                 {
-                    if (iDmc.GetETC(i).Substring(0,5) == iDmc.GetCNSDAT(a).Substring(0, 5))
+                    if (iDmc.GetCNSDAT(a).Contains("-"))
                     {
-                        rulesLB.Items.Add(iDmc.GetETC(i).Substring(0,4) + " exists in ETC and CNS-DAT");
-                        rulesLB.Items.Add("==========");
+                        if (etcFirstSection == iDmc.GetCNSDAT(a).Substring(0, iDmc.GetCNSDAT(a).IndexOf("-")))
+                        {
+                            rulesLB.Items.Add(etcFirstSection + " exists in ETC and CNS-DAT");
+                            rulesLB.Items.Add("==========");
+                        }
                     }
                 }
             }
@@ -549,7 +561,7 @@ namespace Diff_Tools
 
         public void FindEntry(string textLine)
         {
-            int pos = 0;
+            var pos = 0;
             pos = displayRTB.Find(textLine, pos, RichTextBoxFinds.MatchCase);
             while (pos != -1)
             {
@@ -576,7 +588,7 @@ namespace Diff_Tools
                 }
                 trimPrevFile = regex.Replace(trimPrevFile, string.Empty);
                 trimNewFile = regex.Replace(trimNewFile, string.Empty);
-                int result = string.Compare(trimPrevFile, trimNewFile, StringComparison.Ordinal);
+                var result = string.Compare(trimPrevFile, trimNewFile, StringComparison.Ordinal);
 
                 if (result < 0)
                 {
@@ -596,7 +608,7 @@ namespace Diff_Tools
 
         public void HighlightFlags(string prevFile, string newFile, char changeType)
         {
-            int pos = 0;
+            var pos = 0;
             pos = displayRTB.Find(prevFile, pos, RichTextBoxFinds.MatchCase);
             while (pos != -1)
             {
@@ -674,7 +686,7 @@ namespace Diff_Tools
         }   
         public void HighlightFlags(string textLine, char changeType)
         {
-            int pos = 0;
+            var pos = 0;
             pos = displayRTB.Find(textLine, pos, RichTextBoxFinds.MatchCase);
             while (pos != -1)
             {
@@ -723,73 +735,73 @@ namespace Diff_Tools
             int fsModDiv;
             do
             {
-                count2 = int.Parse(diff.GetHexIndex(count)) + 1;                                                        // Get hexindex for file section starting point
+                count2 = int.Parse(diff.HexIndex[count]) + 1;                                                        // Get hexindex for file section starting point
                 do
                 {
-                    diff.AddFileSection(diff.GetTrimFileContents(count2));                                                  // Add FileContents[count2] to FileSection list
+                    diff.FileSection.Add(diff.TrimFileContents[count2]);                                                  // Add FileContents[count2] to FileSection list
                     count2 += 1;
-                } while (count2 != int.Parse(diff.GetHexIndex(count + 1)));                                             // Loop until index of next hexIndex
+                } while (count2 != int.Parse(diff.HexIndex[count + 1]));                                             // Loop until index of next hexIndex
                 
-                fsIntDiv = diff.GetFileSection().Count/2;
-                fsModDiv = diff.GetFileSection().Count % 2;                                                             // 0 = Even number of lines, 1 = Odd number of lines
-                int mpIndex = diff.GetFileSection().IndexOf("---"); 
+                fsIntDiv = diff.FileSection.Count/2;
+                fsModDiv = diff.FileSection.Count % 2;                                                             // 0 = Even number of lines, 1 = Odd number of lines
+                var mpIndex = diff.FileSection.IndexOf("---"); 
                 if(mpIndex != -1) {                                                                                     // If file section contains "---"
 
                     if (fsIntDiv == mpIndex && fsModDiv == 1)                                                               //  
                     {
-                        for (var i = 0; i < diff.GetFileSection().IndexOf("---"); i++)                                          // Loop fileSection by 1 until "---"
+                        for (var i = 0; i < diff.FileSection.IndexOf("---"); i++)                                          // Loop fileSection by 1 until "---"
                         {
-                            CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (diff.GetFileSection().Count / 2)));   // Compare previous and new file
+                            CompareFiles(diff.FileSection[i], diff.FileSection[i + 1 + (diff.FileSection.Count / 2)]);   // Compare previous and new file
                         }
                     } else if(fsIntDiv != mpIndex || fsModDiv == 0)                                                     // If "---" isn't in middle of list
                     {
-                        if ((mpIndex + 1) * 2 <= diff.GetFileSection().Count()){                                            // If file is added in file section
+                        if ((mpIndex + 1) * 2 <= diff.FileSection.Count()){                                            // If file is added in file section
 
                             for (var i = 0; i < mpIndex; i++)                                                                   // Loop fileSection by 1 until "---" index
                             {
-                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + (mpIndex)));                       // Compare previous and new file
+                                CompareFiles(diff.FileSection[i], diff.FileSection[i + 1 + (mpIndex)]);                       // Compare previous and new file
                             }
-                            for (var i = mpIndex + fsIntDiv; i < diff.GetFileSection().Count(); i++)                            // Loop through leftover fileSection until end
+                            for (var i = mpIndex + fsIntDiv; i < diff.FileSection.Count(); i++)                            // Loop through leftover fileSection until end
                             {
-                                if (!(diff.GetFileSection(i).Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *")))       // if current line doesn't equal "SAFETY" AND doesn't start with "> *"        
+                                if (!(diff.FileSection[i].Contains("SAFETY")) && !(diff.FileSection[i].StartsWith("> *")))       // if current line doesn't equal "SAFETY" AND doesn't start with "> *"        
                                 {
-                                    addFileLV.Items.Add(diff.GetFileSection(i));                                                            // Add current line to addFileLV     
+                                    addFileLV.Items.Add(diff.FileSection[i]);                                                            // Add current line to addFileLV     
                                     addFileLV.Items.Add("==========");
-                                    HighlightFlags(diff.GetFileSection(i), 'a');                                                            // Highlight file in displayRTB
-                                    CheckSpecCond(diff.GetFileSection(i));
+                                    HighlightFlags(diff.FileSection[i], 'a');                                                            // Highlight file in displayRTB
+                                    CheckSpecCond(diff.FileSection[i]);
                                 }
                             }
-                        } else if((mpIndex + 1) * 2 > diff.GetFileSection().Count())    // If file is removed in file section
+                        } else if((mpIndex + 1) * 2 > diff.FileSection.Count())    // If file is removed in file section
                         {
-                            int startAdd = ((diff.GetFileSection().Count()) - (mpIndex + 1));
+                            var startAdd = ((diff.FileSection.Count()) - (mpIndex + 1));
                             for (var i = startAdd; i < mpIndex; i++){
-                                if (diff.GetFileSection(i) != "---")
+                                if (diff.FileSection[i] != "---")
                                 {
-                                    addFileLV.Items.Add(diff.GetFileSection(i));
+                                    addFileLV.Items.Add(diff.FileSection[i]);
                                     addFileLV.Items.Add("==========");
-                                    HighlightFlags(diff.GetFileSection(i), 'a');
-                                    CheckSpecCond(diff.GetFileSection(i));
+                                    HighlightFlags(diff.FileSection[i], 'a');
+                                    CheckSpecCond(diff.FileSection[i]);
                                 }
                             }
                             for (var i = 0; i < startAdd; i++)
                             {
-                                CompareFiles(diff.GetFileSection(i), diff.GetFileSection(i + 1 + mpIndex));
+                                CompareFiles(diff.FileSection[i], diff.FileSection[i + 1 + mpIndex]);
                             }
                         }
                     }
                 } else if(mpIndex == -1)    // If file section doesn't contain "---" (Only add or remove)
                 {
-                    for (var i = 0; i <= diff.GetFileSection().Count() - 1; i++)
+                    for (var i = 0; i <= diff.FileSection.Count() - 1; i++)
                     {
-                        if (!(diff.GetFileSection().Contains("SAFETY")) && !(diff.GetFileSection(i).StartsWith("> *             ")))    // If file section doesn't contain SAFETY and file section[i] isn't prod comment
+                        if (!(diff.FileSection.Contains("SAFETY")) && !(diff.FileSection[i].StartsWith("> *             ")))    // If file section doesn't contain SAFETY and file section[i] isn't prod comment
                         {
-                            if (!diff.GetFileSection(i).StartsWith("> *"))
+                            if (!diff.FileSection[i].StartsWith("> *"))
                             {
                                 // Add FileSection[i] to mainFrm LV and highlight on Diff text
-                                addFileLV.Items.Add(diff.GetFileSection(i));
+                                addFileLV.Items.Add(diff.FileSection[i]);
                                 addFileLV.Items.Add("==========");
-                                HighlightFlags(diff.GetFileSection(i), 'a');
-                                CheckSpecCond(diff.GetFileSection(i));
+                                HighlightFlags(diff.FileSection[i], 'a');
+                                CheckSpecCond(diff.FileSection[i]);
                             }
                         }
                         else
@@ -797,10 +809,10 @@ namespace Diff_Tools
                             if (diff.SafetyFlag == false && diff.GetSafetyFiles().Count() == 0)
                             {
                                 diff.SafetyFlag = true;
-                                diff.AddSafetyFiles(diff.GetFileSection(i));
+                                diff.AddSafetyFiles(diff.FileSection[i]);
                             } else if (diff.SafetyFlag && diff.GetSafetyFiles().Count() == 1)
                             {
-                                diff.AddSafetyFiles(diff.GetFileSection(i));
+                                diff.AddSafetyFiles(diff.FileSection[i]);
                             }
                         }
                     }
@@ -808,19 +820,19 @@ namespace Diff_Tools
                 }
                         
                 
-                diff.GetFileSection().Clear();
+                diff.FileSection.Clear();
                 count += 1;
-            } while (count < diff.GetHexIndex().Count - 1);
+            } while (count < diff.HexIndex.Count - 1);
             CheckDupETC(dmc);
             if (dmc.ApiVer != "NONE") { CheckAPIDS(dmc); }
             
-            CheckIORev(diff.GetIOFiles());
+            CheckIORev(diff.IoFiles);
         }
 
         public List<string> TrimBeginEnd(List<string> contentsList)
         {
-            int startIndex = diff.GetOrigFileContents().IndexOf("################################################################################") +1;
-            int stopIndex = diff.GetOrigFileContents().Contains("================================================================================") ? diff.GetOrigFileContents().IndexOf("================================================================================") - 1:diff.GetOrigFileContents().Count - 1;
+            var startIndex = diff.OrigFileContents.IndexOf("################################################################################") +1;
+            var stopIndex = diff.OrigFileContents.Contains("================================================================================") ? diff.OrigFileContents.IndexOf("================================================================================") - 1:diff.OrigFileContents.Count - 1;
             if (contentsList.Contains("================================================================================"))
             {
                 for (var i = contentsList.Count - 1;i >= stopIndex; i--)
@@ -855,7 +867,7 @@ namespace Diff_Tools
                 {
                     do
                     {
-                        dmc.AddOrigDMCFileContents(sr.ReadLine());
+                        dmc.OrigDMCFileContents.Add(sr.ReadLine());
                     } while (sr.Peek() != -1);
                 }
                 dmc.DMCFileExists = true;
@@ -876,7 +888,7 @@ namespace Diff_Tools
                 {
                     do
                     {
-                        dmc.AddOrigLISTAFileContents(sr.ReadLine());
+                        dmc.OrigLISTAFileContents.Add(sr.ReadLine());
                     } while (sr.Peek() != -1);
                 }
                 dmc.ListaFileExists = true;
@@ -894,13 +906,13 @@ namespace Diff_Tools
             {
                 do
                 {
-                    diff.AddOrigFileContents(sr.ReadLine());
+                    diff.OrigFileContents.Add(sr.ReadLine());
                 } while (sr.Peek() != -1);
             }
             diff.FillSerialAndTypeVar();
-            for (var i = 0; i < diff.GetOrigFileContents().Count; i++)
+            for (var i = 0; i < diff.OrigFileContents.Count; i++)
             {
-                displayRTB.Text += diff.GetOrigFileContents(i) + System.Environment.NewLine;
+                displayRTB.Text += diff.OrigFileContents[i] + System.Environment.NewLine;
             }
             
         }
@@ -1171,8 +1183,8 @@ namespace Diff_Tools
                 piodLV.Items.Add("---");
                 piodLV.Items.Add(newFile);
                 piodLV.Items.Add("==========");
-                diff.AddIOFiles(prevFile);
-                diff.AddIOFiles(newFile);
+                diff.IoFiles.Add(prevFile);
+                diff.IoFiles.Add(newFile);
                 
                 if ((rollBackLV.FindItemWithText(prevFile) == null) && (rollBackLV.FindItemWithText(newFile) == null))
                 {
@@ -1186,7 +1198,7 @@ namespace Diff_Tools
             {
                 piodLV.Items.Add(file);
                 piodLV.Items.Add("==========");
-                diff.AddIOFiles(file);
+                diff.IoFiles.Add(file);
                 if ((addFileLV.FindItemWithText(file) == null))
                 {
                     HighlightFlags(file, 'p');
@@ -1341,7 +1353,7 @@ namespace Diff_Tools
             {
                 indexRemainder = 8 - indexRemainder;
             }
-            Int32.TryParse(dmc.GetSpecSepIndex(indexRemainder),out int sepIndex);
+            Int32.TryParse(dmc.SpecSepIndex[indexRemainder],out int sepIndex);
             sepIndex += 1;
             if (bitVal == 1)
             {
@@ -1357,7 +1369,7 @@ namespace Diff_Tools
             string[] splitRule = machineTypeRule.Split('|');
             for (var i = 0; i < splitRule.Count(); i++)
             {
-                int categoryEndIndex = splitRule[i].IndexOf("]") + 1;
+                var categoryEndIndex = splitRule[i].IndexOf("]") + 1;
                 switch (splitRule[i].Substring(0, categoryEndIndex))
                 {
                     case "[NC]":
@@ -1426,7 +1438,7 @@ namespace Diff_Tools
         //Rule checker criteria 3 subfunctions
         public bool CompWinVerCriteria(string ruleWinVersion, string dmcWinVersion)
         {
-            int result = string.Compare(dmcWinVersion, ruleWinVersion);
+            var result = string.Compare(dmcWinVersion, ruleWinVersion);
             if (result != 0)
             {
                 return false;
@@ -1435,7 +1447,7 @@ namespace Diff_Tools
         }
         public bool CompVSYSCriteria( string ruleVSYSVersion, string dmcVSYSVersion, string comparator)
         {
-            int result = string.Compare(dmcVSYSVersion, ruleVSYSVersion);
+            var result = string.Compare(dmcVSYSVersion, ruleVSYSVersion);
             switch (comparator)
             {
                 case "=":
@@ -1467,7 +1479,7 @@ namespace Diff_Tools
         }
         public bool CompPLCVerCriteria(string rulePLCVersion, string dmcPLCVersion, string comparator)
         {
-            int result = string.Compare(dmcPLCVersion, rulePLCVersion);
+            var result = string.Compare(dmcPLCVersion, rulePLCVersion);
             switch (comparator)
             {
                 case "=":
@@ -1495,7 +1507,7 @@ namespace Diff_Tools
 
         public bool CompNCVerCriteria(string ruleNCVersion, string dmcNCVersion, string comparator)
         {
-            int result = string.Compare(dmcNCVersion, ruleNCVersion);
+            var result = string.Compare(dmcNCVersion, ruleNCVersion);
             switch (comparator)
             {
                 case "=":
@@ -1530,7 +1542,7 @@ namespace Diff_Tools
 
             if (ruleMPRMVersion.Contains("*"))
             {
-                int ruleMPRMwildcardIndex = ruleMPRMVersion.IndexOf("*");
+                var ruleMPRMwildcardIndex = ruleMPRMVersion.IndexOf("*");
                 string trimmedDMCMPRM = dmcMPRMVersion.Substring(0, ruleMPRMwildcardIndex) + "*.PBU"; //+ dmcMPRMVersion.Substring(dmcMPRMVersion.Length -((ruleMPRMVersion.Length - 1) - ruleMPRMwildcardIndex));
                 if (string.Compare(trimmedDMCMPRM, ruleMPRMVersion) != 0)
                 {
@@ -1565,7 +1577,7 @@ namespace Diff_Tools
 
             if (rulePLCUFVersion.Contains("*"))
             {
-                int rulePLCUFwildcardIndex = rulePLCUFVersion.IndexOf("*");
+                var rulePLCUFwildcardIndex = rulePLCUFVersion.IndexOf("*");
                 string trimmedDMCPLCUF = dmcPLCUFVersion.Substring(0, rulePLCUFwildcardIndex) + "*" + dmcPLCUFVersion.Substring(dmcPLCUFVersion.Length - ((rulePLCUFVersion.Length - 1) - rulePLCUFwildcardIndex));
                 if (string.Compare(trimmedDMCPLCUF, rulePLCUFVersion) != 0)
                 {
@@ -1583,7 +1595,7 @@ namespace Diff_Tools
 
             if (rulePLTUAVersion.Contains("*"))
             {
-                int rulePLTUAwildcardIndex = rulePLTUAVersion.IndexOf("*");
+                var rulePLTUAwildcardIndex = rulePLTUAVersion.IndexOf("*");
                 string trimmedDMCPLTUA = dmcPLTUAVersion.Substring(0, rulePLTUAwildcardIndex) + "*" + dmcPLTUAVersion.Substring(dmcPLTUAVersion.Length - ((rulePLTUAVersion.Length - 1) - rulePLTUAwildcardIndex));
                 if (string.Compare(trimmedDMCPLTUA, rulePLTUAVersion) != 0)
                 {
@@ -1600,8 +1612,8 @@ namespace Diff_Tools
         public void outputToLog(string outputRecord)
         {
             //string outputRecord
-            //string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
-            string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
+            string filePath = "C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\outputLog.CSV";
+            //string filePath = "\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\outputLog.CSV";
             if (!File.Exists(filePath))
             {
                 using (var sw = File.CreateText(filePath))
