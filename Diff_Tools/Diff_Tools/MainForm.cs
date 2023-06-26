@@ -27,7 +27,7 @@ namespace Diff_Tools
         static public DataSet rulesDS;
         static public DataTable rulesDT;
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9]");
-        public ControlTypeForm controlTypeForm = new ControlTypeForm();
+        //public ControlTypeForm controlTypeForm = new ControlTypeForm();
         public mainForm()
         {
             InitializeComponent();

@@ -9,7 +9,6 @@ namespace Diff_Tools
 {
     public class Diff
     {
-
         public List<string> OrigFileContents { get; set; }
         public List<string> TrimFileContents { get; set; }
         public List<string> HexIndex { get; set; }
