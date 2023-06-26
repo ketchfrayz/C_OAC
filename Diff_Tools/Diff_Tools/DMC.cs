@@ -28,7 +28,7 @@ namespace Diff_Tools
                                                           "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
         //private readonly string[] LatheLISTALabel =  { "/(PCGF)", "/(PCGJ)", "/(PCGL)", "/(PCGM)", "/(PCGS)", "/(PCGB)", "/(PCGK)", "/(PCGV)", "/(PCGW)", "/(PCG00)", "/(ETC)" };
         //private readonly string[] MCLISTALabel = { "/(PCGS)", "/(PCGT)", "/(PCGU)", "/(PCGH)", "/(PCGK)", "/(PCGM)", "/(PCGN)", "/(PCGX)", "/(PCGQ)", "/(PCGR)", "/(PCGL)", "/(PCGC)", "/(PCGD)", "/(PCG02)", "/(ETC)" };
-        private string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
+        private readonly string[] controlTypePattern = { "\\-H$", "\\-R$", "\\-E$" };
         private static readonly string[] latheMachineTypePattern = new string[] {"II$", "IIM$", "IIMY$", "IIMW", "IIMYW$", "IIW$", "\\-e$", "\\-eE$", "\\-M$", "\\-MY$", "\\-MYW$","M$", "MY$", "MYW$",
                                                                                  "MW$", "W$", "\\-W$", "\\-eMYE$", "\\-eME$", "L$" };
 
@@ -378,7 +378,7 @@ namespace Diff_Tools
                 i++;
             }
         }
-        public void fillClassVar()
+        public void FillClassVar()
         {
 
                     FillClassVarCtrlType(OrigLISTAFileContents.IndexOf(dmcLabel[0]));
@@ -391,7 +391,7 @@ namespace Diff_Tools
                     else
                     {
                             dmcLabel.Remove("/(PCGM)");
-                            fillClassVarMC();  
+                            FillClassVarMC();  
                     }
                     
                     FillClassVarAPI(OrigLISTAFileContents.IndexOf("/(CDAD001)"));
@@ -422,7 +422,7 @@ namespace Diff_Tools
             }
             
         }
-        public void fillClassVarMC()
+        public void FillClassVarMC()
         {
             var index = OrigLISTAFileContents.IndexOf("/(PBU-DAT)") + 2;
             while (OrigLISTAFileContents[index] != "*")

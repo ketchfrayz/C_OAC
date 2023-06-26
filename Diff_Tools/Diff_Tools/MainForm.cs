@@ -892,7 +892,7 @@ namespace Diff_Tools
                     } while (sr.Peek() != -1);
                 }
                 dmc.ListaFileExists = true;
-                dmc.fillClassVar();
+                dmc.FillClassVar();
             }
             else
             {
