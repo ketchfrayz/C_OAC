@@ -10,18 +10,19 @@ namespace Diff_Tools
 {
     public class DMC
     {
-        private List<string> NC1;
-        private List<string> NCB1;
-        private List<string> NCB2;
-        private List<string> PLC1;
-        private List<string> PLC2;
-        private List<string> PLC3;
-        private List<string> ETC;
-        private List<string> PBUDAT;
-        private List<string> CNSDAT;
-        private List<string> specSepIndex;
-        private List<string> origLISTAFileContents;
-        private List<string> origDMCFileContents;
+       
+        public List<string> NC1 { get; set; }
+        public List<string> NCB1 { get; set; }
+        public List<string> NCB2 { get; set; }
+        public List<string> PLC1 { get; set; }
+        public List<string> PLC2 { get; set; }
+        public List<string> PLC3 { get; set; }
+        public List<string> ETC { get; set; }
+        public List<string> PBUDAT { get; set; }
+        public List<string> CNSDAT { get; set; }
+        public List<string> SpecSepIndex { get; set; }
+        public List<string> OrigLISTAFileContents { get; set; }
+        public List<string> OrigDMCFileContents { get; set; }
         private static readonly Regex regex = new Regex("[^a-zA-Z0-9.-]");
         private List<string> dmcLabel = new List<string> {"/(OSPN)", "/(MCN)", "/(BNO)", "/(PCG3)", "/(PCGA)", "/(CD1S)", "/(PCGN)", "/(NC1)", "/(NCB1)", "/(PLC1)",
                                                           "/(PLC2)", "/(PCG2)", "/(PBU-DAT)", "/(CNS-DAT)", "/(ETC)"};
@@ -33,18 +34,18 @@ namespace Diff_Tools
 
         public DMC()    // DMC class constructor
         {
-            this.NC1 = new List<string>();
-            this.NCB1 = new List<string>();
-            this.NCB2 = new List<string>();
-            this.PLC1 = new List<string>();
-            this.PLC2 = new List<string>();
-            this.PLC3 = new List<string>();
-            this.ETC =  new List<string>();
-            this.PBUDAT = new List<string>();
-            this.CNSDAT = new List<string>();
-            this.specSepIndex = new List<string>();
-            this.origLISTAFileContents = new List<string>();
-            this.origDMCFileContents = new List<string>();
+            NC1 = new List<string>();
+            NCB1 = new List<string>();
+            NCB2 = new List<string>();
+            PLC1 = new List<string>();
+            PLC2 = new List<string>();
+            PLC3 = new List<string>();
+            ETC = new List<string>();
+            PBUDAT = new List<string>();
+            CNSDAT = new List<string>();
+            SpecSepIndex = new List<string>();
+            OrigLISTAFileContents = new List<string>();
+            OrigDMCFileContents = new List<string>();
         }
         public bool IsBSpecPLC(string plcVer)
         {
@@ -111,14 +112,6 @@ namespace Diff_Tools
                 return machineType;
             }
         }
-        public string GetSpecSepIndex(int index)
-        {
-            return specSepIndex[index];
-        }
-        public void AddOrigDMCFileContents(string value)
-        {
-            origDMCFileContents.Add(value);
-        }
         public List<string> GetNC1()
         {
             return NC1;
@@ -182,47 +175,47 @@ namespace Diff_Tools
         public void FillSpecCodeList()
         {
             //grab NC spec code data
-            int startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.1 ]==============================");
+            var startIndex = OrigDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.1 ]==============================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                NC1.Add(origDMCFileContents[i]);
+                NC1.Add(OrigDMCFileContents[i]);
             }
 
-            startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.2 ]==============================");
+            startIndex = OrigDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.2 ]==============================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                NCB1.Add(origDMCFileContents[i]);
+                NCB1.Add(OrigDMCFileContents[i]);
             }
 
-            startIndex = origDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.3 ]==============================");
+            startIndex = OrigDMCFileContents.IndexOf("===========================[ NC-SPEC CODE No.3 ]==============================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                NCB2.Add(origDMCFileContents[i]);
+                NCB2.Add(OrigDMCFileContents[i]);
             }
 
-            startIndex = origDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.1 ]=============================");
+            startIndex = OrigDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.1 ]=============================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                PLC1.Add(origDMCFileContents[i]);
+                PLC1.Add(OrigDMCFileContents[i]);
             }
 
-            startIndex = origDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.2 ]===========================");
+            startIndex = OrigDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.2 ]===========================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                PLC2.Add(origDMCFileContents[i]);
+                PLC2.Add(OrigDMCFileContents[i]);
             }
 
-            startIndex = origDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.3 ]===========================");
+            startIndex = OrigDMCFileContents.IndexOf("===========================[ PLC-SPEC CODE No.3 ]===========================");
             for (var i = startIndex + 6; i <= startIndex + 80; i++)
             {
-                PLC3.Add(origDMCFileContents[i]);
+                PLC3.Add(OrigDMCFileContents[i]);
             }
 
             for (var i = 0; i <= NC1.Count - 1; i++)
             {
                 if (NC1[i] == "==================  ==================  ==================  ==================" || NC1[i] == "------------------  ------------------  ------------------  ------------------")
                 {
-                    specSepIndex.Add(i.ToString());
+                    SpecSepIndex.Add(i.ToString());
 
                 }
             }
@@ -237,7 +230,7 @@ namespace Diff_Tools
                 return false;
             }
 
-            if (origLISTAFileContents[origLISTAFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("MNC"))
+            if (OrigLISTAFileContents[OrigLISTAFileContents.IndexOf(dmcLabel[3]) + 2].StartsWith("MNC"))
             {
                 return false;
             }
@@ -246,14 +239,14 @@ namespace Diff_Tools
 
         private void FillClassVarCtrlType(int index)
         {
-            OSPType = TrimControlType(origLISTAFileContents[index + 2]);
+            OSPType = TrimControlType(OrigLISTAFileContents[index + 2]);
         }
 
         private void FillClassVarAPI(int index)
         {
             if (index != -1)
             {
-                ApiVer = regex.Replace(origLISTAFileContents[index + 1], string.Empty);
+                ApiVer = regex.Replace(OrigLISTAFileContents[index + 1], string.Empty);
                 ApiVer = ApiVer.Substring(ApiVer.IndexOf("V") + 1);
                 ApiVer = ApiVer.Replace("P", "");
                 ApiVer = ApiVer.Replace("W", "");
@@ -267,79 +260,79 @@ namespace Diff_Tools
 
         private void FillClassVarMchType(int index)
         {
-            MachineType = TrimMachineType(regex.Replace(origLISTAFileContents[index + 2], string.Empty));
+            MachineType = TrimMachineType(regex.Replace(OrigLISTAFileContents[index + 2], string.Empty));
         }
 
         private void FillClassVarVSYS(int index)
         {
-            Vsys = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            Vsys = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
         }
 
         private void FillClassVarSerialNo(int index)
         {
-            SerialNumber = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            SerialNumber = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
         }
 
         private void FillClassVarNcVer(int index)
         {
-            NcVer = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            NcVer = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
             IsBSpecNC(NcVer);
         }
 
         private void FillClassVarPLCVer(int index)
         {
-            PlcVer = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            PlcVer = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
             IsBSpecPLC(PlcVer);
         }
 
         private void FillClassVarWinVersion(int index)
         {
-            WinVersion = regex.Replace(origLISTAFileContents[index + 1], string.Empty);
+            WinVersion = regex.Replace(OrigLISTAFileContents[index + 1], string.Empty);
         }
 
         private void FillClassVarAPILibVer(int index)
         {
-            ApiLibVer = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            ApiLibVer = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
         }
 
         private void FillClassVarNC1Hex(int index)
         {
-            NC1Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            NC1Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarNCB1Hex(int index)
         {
-            NCB1Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            NCB1Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarNCB2Hex(int index)
         {
-            NCB2Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            NCB2Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarPLC1Hex(int index)
         {
-            PLC1Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            PLC1Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarPLC2Hex(int index)
         {
-            PLC2Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            PLC2Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarPLC3Hex(int index)
         {
-            PLC3Hex = regex.Replace(origLISTAFileContents[index + 3] + "-" + origLISTAFileContents[index + 5], string.Empty);
+            PLC3Hex = regex.Replace(OrigLISTAFileContents[index + 3] + "-" + OrigLISTAFileContents[index + 5], string.Empty);
         }
 
         private void FillClassVarINST(int index)
         {
-            INST = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            INST = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
         }
 
         private void FillClassVarVDRV(int index)
         {
-            VDRV = regex.Replace(origLISTAFileContents[index + 2], string.Empty);
+            VDRV = regex.Replace(OrigLISTAFileContents[index + 2], string.Empty);
         }
 
         private string ShortenPathName(string path)
@@ -351,44 +344,44 @@ namespace Diff_Tools
 
         private void FillClassVarCNSDAT(int index)
         {
-            int i = index + 2;
-            while (origLISTAFileContents[i] != "*")
+            var i = index + 2;
+            while (OrigLISTAFileContents[i] != "*")
             {
-                CNSDAT.Add(ShortenPathName(origLISTAFileContents[i]));
+                CNSDAT.Add(ShortenPathName(OrigLISTAFileContents[i]));
                 i++;
             }
         }
 
         private void FillClassVarPBUDAT(int index)
         {
-            int i = index + 2;
+            var i = index + 2;
             //string[] splitstring;
-            while (origLISTAFileContents[i] != "*")    // Loop until end of PBU-DAT block
+            while (OrigLISTAFileContents[i] != "*")    // Loop until end of PBU-DAT block
             {
-                PBUDAT.Add(ShortenPathName(origLISTAFileContents[i]));
+                PBUDAT.Add(ShortenPathName(OrigLISTAFileContents[i]));
                 i++;
             }
         }
         private void FillClassVarETC(int index)
         {
-            int i = index + 2;
+            var i = index + 2;
             string fileExt;
 
-            while (origLISTAFileContents[i] != "*")     // Loop until end of Var block
+            while (OrigLISTAFileContents[i] != "*")     // Loop until end of Var block
             {
 
-                fileExt = origLISTAFileContents[i].Substring(origLISTAFileContents[i].Length - 4);
+                fileExt = OrigLISTAFileContents[i].Substring(OrigLISTAFileContents[i].Length - 4);
                 if (fileExt != ".DEF" && fileExt != ".CNC" && fileExt != ".INI"  && fileExt != ".BMP")          // If file is .CNS or .PBU
                 {   
-                    ETC.Add(ShortenPathName(origLISTAFileContents[i]));                                             // Remove path and add filename to the list
+                    ETC.Add(ShortenPathName(OrigLISTAFileContents[i]));                                             // Remove path and add filename to the list
                 }
                 i++;
             }
         }
-        public void fillClassVar()
+        public void FillClassVar()
         {
 
-                    FillClassVarCtrlType(origLISTAFileContents.IndexOf(dmcLabel[0]));
+                    FillClassVarCtrlType(OrigLISTAFileContents.IndexOf(dmcLabel[0]));
 
                     if (IsLathe(OSPType))
                     {
@@ -398,59 +391,59 @@ namespace Diff_Tools
                     else
                     {
                             dmcLabel.Remove("/(PCGM)");
-                            fillClassVarMC();  
+                            FillClassVarMC();  
                     }
                     
-                    FillClassVarAPI(origLISTAFileContents.IndexOf("/(CDAD001)"));
-                    FillClassVarMchType(origLISTAFileContents.IndexOf(dmcLabel[1]));              
-                    FillClassVarSerialNo(origLISTAFileContents.IndexOf(dmcLabel[2]));                  
-                    FillClassVarNcVer(origLISTAFileContents.IndexOf(dmcLabel[3]));
-                    FillClassVarPLCVer(origLISTAFileContents.IndexOf(dmcLabel[4]));
-                    FillClassVarWinVersion(origLISTAFileContents.IndexOf(dmcLabel[5]));
-                    FillClassVarAPILibVer(origLISTAFileContents.IndexOf(dmcLabel[6]));
-                    FillClassVarNC1Hex(origLISTAFileContents.IndexOf(dmcLabel[7]));
-                    FillClassVarNCB1Hex(origLISTAFileContents.IndexOf(dmcLabel[8]));
-                    FillClassVarPLC1Hex(origLISTAFileContents.IndexOf(dmcLabel[9]));
-                    FillClassVarPLC2Hex(origLISTAFileContents.IndexOf(dmcLabel[10]));
-                    FillClassVarVSYS(origLISTAFileContents.IndexOf(dmcLabel[11]));
-                    FillClassVarPBUDAT(origLISTAFileContents.IndexOf(dmcLabel[12]));
-                    FillClassVarCNSDAT(origLISTAFileContents.IndexOf(dmcLabel[13]));
-                    FillClassVarETC(origLISTAFileContents.IndexOf(dmcLabel[14]));
+                    FillClassVarAPI(OrigLISTAFileContents.IndexOf("/(CDAD001)"));
+                    FillClassVarMchType(OrigLISTAFileContents.IndexOf(dmcLabel[1]));              
+                    FillClassVarSerialNo(OrigLISTAFileContents.IndexOf(dmcLabel[2]));                  
+                    FillClassVarNcVer(OrigLISTAFileContents.IndexOf(dmcLabel[3]));
+                    FillClassVarPLCVer(OrigLISTAFileContents.IndexOf(dmcLabel[4]));
+                    FillClassVarWinVersion(OrigLISTAFileContents.IndexOf(dmcLabel[5]));
+                    FillClassVarAPILibVer(OrigLISTAFileContents.IndexOf(dmcLabel[6]));
+                    FillClassVarNC1Hex(OrigLISTAFileContents.IndexOf(dmcLabel[7]));
+                    FillClassVarNCB1Hex(OrigLISTAFileContents.IndexOf(dmcLabel[8]));
+                    FillClassVarPLC1Hex(OrigLISTAFileContents.IndexOf(dmcLabel[9]));
+                    FillClassVarPLC2Hex(OrigLISTAFileContents.IndexOf(dmcLabel[10]));
+                    FillClassVarVSYS(OrigLISTAFileContents.IndexOf(dmcLabel[11]));
+                    FillClassVarPBUDAT(OrigLISTAFileContents.IndexOf(dmcLabel[12]));
+                    FillClassVarCNSDAT(OrigLISTAFileContents.IndexOf(dmcLabel[13]));
+                    FillClassVarETC(OrigLISTAFileContents.IndexOf(dmcLabel[14]));
 
-            if (origLISTAFileContents.Contains("/(NCB2)"))
+            if (OrigLISTAFileContents.Contains("/(NCB2)"))
             {
                 dmcLabel.Add("/(NCB2)");
-                FillClassVarNCB2Hex(origLISTAFileContents.IndexOf(dmcLabel[15]));
+                FillClassVarNCB2Hex(OrigLISTAFileContents.IndexOf(dmcLabel[15]));
             }
-            if (origLISTAFileContents.Contains("/(PLC3)")) 
+            if (OrigLISTAFileContents.Contains("/(PLC3)")) 
             {
                 dmcLabel.Add("/(PLC3)");
-                FillClassVarPLC3Hex(origLISTAFileContents.IndexOf(dmcLabel[dmcLabel.Count - 1]));
+                FillClassVarPLC3Hex(OrigLISTAFileContents.IndexOf(dmcLabel[dmcLabel.Count - 1]));
             }
             
         }
-        public void fillClassVarMC()
+        public void FillClassVarMC()
         {
-            int index = origLISTAFileContents.IndexOf("/(PBU-DAT)") + 2;
-            while (origLISTAFileContents[index] != "*")
+            var index = OrigLISTAFileContents.IndexOf("/(PBU-DAT)") + 2;
+            while (OrigLISTAFileContents[index] != "*")
             {
-                if (origLISTAFileContents[index].StartsWith("C:\\PBU-DAT\\PLCUF"))
+                if (OrigLISTAFileContents[index].StartsWith("C:\\PBU-DAT\\PLCUF"))
                 {
-                    PLCUF = origLISTAFileContents[index].Substring(11, (origLISTAFileContents[index].Length - 4) - 11);
-                } else if (origLISTAFileContents[index].StartsWith("C:\\PBU-DAT\\MPRM"))
+                    PLCUF = OrigLISTAFileContents[index].Substring(11, (OrigLISTAFileContents[index].Length - 4) - 11);
+                } else if (OrigLISTAFileContents[index].StartsWith("C:\\PBU-DAT\\MPRM"))
                 {
-                    MPRM = origLISTAFileContents[index].Substring(11, (origLISTAFileContents[index].Length - 4) - 11);
+                    MPRM = OrigLISTAFileContents[index].Substring(11, (OrigLISTAFileContents[index].Length - 4) - 11);
                 }
 
                 index += 1;
             }
 
-            index = origLISTAFileContents.IndexOf("/(CNS-DAT)") + 2;
-            while (origLISTAFileContents[index] != "*")
+            index = OrigLISTAFileContents.IndexOf("/(CNS-DAT)") + 2;
+            while (OrigLISTAFileContents[index] != "*")
             {
-                if (origLISTAFileContents[index].StartsWith("C:\\OSP-P\\CNS-DAT\\PLTUA"))
+                if (OrigLISTAFileContents[index].StartsWith("C:\\OSP-P\\CNS-DAT\\PLTUA"))
                 {
-                    PLTUA = origLISTAFileContents[index].Substring(17, (origLISTAFileContents[index].Length - 4) - 17);
+                    PLTUA = OrigLISTAFileContents[index].Substring(17, (OrigLISTAFileContents[index].Length - 4) - 17);
                 }
                 index += 1;
             }
@@ -522,31 +515,20 @@ namespace Diff_Tools
         public string FileLocation
         { get; set; }
         
-
         public string SerialNumber
         { get; set; }
-
         public string NcVer
         { get; set; }
-
         public string PlcVer
         { get; set; }
-
         public string ApiVer
         { get; set; }
-
         public string ApiLibVer
         { get; set; }
         public string Vsys
         {
             get;set;
         }
-
-        public void AddOrigLISTAFileContents(string value)
-        {
-            origLISTAFileContents.Add(value);
-        }
-
         public string TrimControlType(string controlType)
         {
             for(var i = 0; i < controlTypePattern.Length; i++)

@@ -62,8 +62,10 @@ namespace Diff_Tools
             // ioRevLbl
             // 
             this.ioRevLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
             this.ioRevLbl.Location = new System.Drawing.Point(381, 457);
             this.ioRevLbl.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+
             this.ioRevLbl.Name = "ioRevLbl";
             this.ioRevLbl.Size = new System.Drawing.Size(231, 40);
             this.ioRevLbl.TabIndex = 20;
@@ -78,11 +80,13 @@ namespace Diff_Tools
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label7.Location = new System.Drawing.Point(33, 70);
-            this.Label7.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Location = new System.Drawing.Point(28, 101);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(75, 16);
+            this.Label7.Size = new System.Drawing.Size(61, 13);
+
+
             this.Label7.TabIndex = 7;
             this.Label7.Text = "Servo Data";
             // 
@@ -99,11 +103,12 @@ namespace Diff_Tools
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label5.Location = new System.Drawing.Point(33, 52);
-            this.Label5.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Location = new System.Drawing.Point(28, 73);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(75, 16);
+            this.Label5.Size = new System.Drawing.Size(64, 13);
+
             this.Label5.TabIndex = 5;
             this.Label5.Text = "PIOD/SIOD";
             // 
@@ -120,11 +125,12 @@ namespace Diff_Tools
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(34, 33);
-            this.Label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Location = new System.Drawing.Point(28, 45);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(82, 16);
+            this.Label3.Size = new System.Drawing.Size(66, 13);
+
             this.Label3.TabIndex = 3;
             this.Label3.Text = "File Add/Del";
             // 
@@ -141,11 +147,12 @@ namespace Diff_Tools
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(34, 14);
-            this.Label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Location = new System.Drawing.Point(28, 18);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(99, 16);
+            this.Label1.Size = new System.Drawing.Size(78, 13);
+
             this.Label1.TabIndex = 1;
             this.Label1.Text = "File rolled back";
             // 
@@ -180,8 +187,10 @@ namespace Diff_Tools
             // displayRTB
             // 
             this.displayRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
             this.displayRTB.Location = new System.Drawing.Point(7, 28);
             this.displayRTB.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+
             this.displayRTB.Name = "displayRTB";
             this.displayRTB.ReadOnly = true;
             this.displayRTB.Size = new System.Drawing.Size(483, 370);
@@ -195,11 +204,13 @@ namespace Diff_Tools
             this.apiLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.apiLB.FormattingEnabled = true;
             this.apiLB.HorizontalScrollbar = true;
+
             this.apiLB.Location = new System.Drawing.Point(500, 316);
             this.apiLB.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.apiLB.Name = "apiLB";
             this.apiLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.apiLB.Size = new System.Drawing.Size(231, 69);
+
             this.apiLB.TabIndex = 21;
             // 
             // rollBackLV
@@ -275,8 +286,10 @@ namespace Diff_Tools
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
+
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(2, 1, 0, 1);
             this.menuStrip1.Size = new System.Drawing.Size(736, 24);
+
             this.menuStrip1.TabIndex = 27;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -285,7 +298,9 @@ namespace Diff_Tools
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(39, 22);
+
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exitToolStripMenuItem
@@ -301,7 +316,9 @@ namespace Diff_Tools
             this.addNewRuleToolStripMenuItem,
             this.viewExistingRulesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // addNewRuleToolStripMenuItem
@@ -324,11 +341,13 @@ namespace Diff_Tools
             this.rulesLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rulesLB.FormattingEnabled = true;
             this.rulesLB.HorizontalScrollbar = true;
+
             this.rulesLB.Location = new System.Drawing.Point(500, 387);
             this.rulesLB.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.rulesLB.Name = "rulesLB";
             this.rulesLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.rulesLB.Size = new System.Drawing.Size(231, 69);
+
             this.rulesLB.TabIndex = 28;
             // 
             // mainForm
@@ -353,7 +372,9 @@ namespace Diff_Tools
             this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.MaximizeBox = false;
             this.Name = "mainForm";
-            this.Text = "DAU ATLAS - 1.2.2";
+
+            this.Text = "DAU ATLAS - 1.2.3";
+
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);

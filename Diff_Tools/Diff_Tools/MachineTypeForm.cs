@@ -24,8 +24,10 @@ namespace Diff_Tools
 
         private void ReadMachineXML()
         {
-            machineDataSet.ReadXml("\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\MachineList_THINC.xml");
-           // machineDataSet.ReadXml("C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\MachineList_THINC.xml");
+
+            //machineDataSet.ReadXml("\\\\nxfiler\\data05\\USR0\\Ospsoftw.are\\Diff_Tools\\MachineList_THINC.xml");
+            machineDataSet.ReadXml("C:\\Users\\corey\\Documents\\Okuma\\Diff_Tools\\MachineList_THINC.xml");
+
             machineDataTable = machineDataSet.Tables[0];
         }
 
